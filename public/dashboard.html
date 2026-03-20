@@ -618,7 +618,7 @@ document.getElementById('logoutBtn').addEventListener('click', logoutUser);
 // ── Quote of the Day Widget ───────────────────────────────────
 async function loadQuoteOfTheDay() {
     try {
-        const res = await fetch('https://corsproxy.io/?https://indian-quotes-api.vercel.app/api/quotes/random');
+        const res = await fetch('https://api.allorigins.win/raw?url=https%3A%2F%2Findian-quotes-api.vercel.app%2Fapi%2Fquotes%2Frandom');
         if (!res.ok) throw new Error('Failed to fetch quote');
         const data = await res.json();
         
