@@ -4,262 +4,477 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - DoneRight</title>
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/globals.css">
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <div class="dashboard-layout">
-        <!-- Sidebar Navigation -->
-        <aside class="dashboard-sidebar">
-            <a href="/" class="sidebar-logo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
-                    <polyline points="4 14 8 18 14 8"></polyline>
-                    <line x1="16" y1="8" x2="22" y2="8"></line>
-                    <line x1="16" y1="13" x2="22" y2="13"></line>
-                    <line x1="16" y1="18" x2="22" y2="18"></line>
-                </svg>
-                <span>DoneRight</span>
-            </a>
-            
-            <button class="sidebar-add-btn btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                Add New Task
+<div class="dashboard-layout">
+
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="dashboard-sidebar">
+        <a href="/" class="sidebar-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
+                <polyline points="4 14 8 18 14 8"></polyline>
+                <line x1="16" y1="8" x2="22" y2="8"></line>
+                <line x1="16" y1="13" x2="22" y2="13"></line>
+                <line x1="16" y1="18" x2="22" y2="18"></line>
+            </svg>
+            <span>DoneRight</span>
+        </a>
+
+        <button id="openModalBtn" class="sidebar-add-btn btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add New Task
+        </button>
+
+        <ul class="sidebar-nav">
+            <li><a href="#" class="sidebar-item active" id="filterAll">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    All Tasks
+                </div>
+            </a></li>
+            <li><a href="#" class="sidebar-item" id="filterTodo">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    To Do
+                </div>
+                <span class="sidebar-badge" id="sidebarTodoCount">0</span>
+            </a></li>
+            <li><a href="#" class="sidebar-item" id="filterInProgress">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    In Progress
+                </div>
+                <span class="sidebar-badge" id="sidebarInProgressCount">0</span>
+            </a></li>
+            <li><a href="#" class="sidebar-item" id="filterDone">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    Done
+                </div>
+                <span class="sidebar-badge" id="sidebarDoneCount">0</span>
+            </a></li>
+        </ul>
+    </aside>
+
+    <!-- ── Main Content ──────────────────────────────────────── -->
+    <main class="dashboard-main">
+
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="dashboard-greeting">
+                <h1 id="welcomeMessage">Loading...</h1>
+                <p id="currentDate"></p>
+            </div>
+            <div class="dashboard-actions">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search tasks...">
+                <div class="profile-avatar" id="avatarDisplay" title="Profile">?</div>
+                <button id="logoutBtn" class="action-icon" style="background:transparent;border:none;" title="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Total Tasks</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </div>
+                <span class="stat-value" id="statTotal">—</span>
+                <span class="stat-subtext">tasks in your list</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>To Do</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <span class="stat-value" id="statTodo" style="color:#60a5fa">—</span>
+                <span class="stat-subtext">not started yet</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>In Progress</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <span class="stat-value" id="statInProgress" style="color:#fb923c">—</span>
+                <span class="stat-subtext">being worked on</span>
+            </div>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Done</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <span class="stat-value" id="statDone" style="color:#34d399">—</span>
+                <span class="stat-subtext" id="statDonePercent">completed</span>
+            </div>
+        </div>
+
+        <!-- Task List (live from Firestore) -->
+        <div class="tasks-area">
+            <div class="tasks-toolbar">
+                <div class="tasks-title"><h2>Your Tasks</h2></div>
+                <div class="tasks-filters">
+                    <span class="active" data-filter="ALL">All</span>
+                    <span data-filter="TODO">To Do</span>
+                    <span data-filter="IN_PROGRESS">In Progress</span>
+                    <span data-filter="DONE">Done</span>
+                </div>
+            </div>
+            <div id="tasksList">
+                <div class="tasks-loading">
+                    <div class="spinner"></div>
+                    Loading your tasks...
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── Add Task Modal ───────────────────────────────────────── -->
+<div class="modal-backdrop" id="addTaskModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+            <h2 id="modalTitle">New Task</h2>
+            <button class="modal-close" id="closeModalBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
-            
-            <ul class="sidebar-nav">
-                <li><a href="#" class="sidebar-item active">
-                    <div class="sidebar-item-content">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                        Dashboard
-                    </div>
-                </a></li>
-                <li><a href="#" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
-                        Inbox
-                    </div>
-                    <span class="sidebar-badge">12</span>
-                </a></li>
-                <li><a href="#" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                        Today
-                    </div>
-                    <span class="sidebar-badge">5</span>
-                </a></li>
-                <li><a href="#" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                        Upcoming
-                    </div>
-                </a></li>
-                <li><a href="#" class="sidebar-item">
-                    <div class="sidebar-item-content">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                        Completed
-                    </div>
-                </a></li>
-            </ul>
-        </aside>
-        
-        <!-- Main Dashboard Content -->
-        <main class="dashboard-main">
-            <!-- Header Section -->
-            <header class="dashboard-header">
-                <div class="dashboard-greeting">
-                    <h1 id="welcomeMessage">Loading Dashboard...</h1>
-                    <p id="currentDate">Loading date...</p>
-                </div>
-                <div class="dashboard-actions">
-                    <input type="text" class="search-input" placeholder="Search tasks...">
-                    
-                    <button class="action-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    </button>
-                    
-                    <div class="profile-avatar" id="avatarDisplay" title="Profile">A</div>
-                    
-                    <button id="logoutBtn" class="action-icon" style="background: transparent; border: none;" title="Logout">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
-                    </button>
-                </div>
-            </header>
-            
-            <!-- Analytics Row -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>Total Tasks</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-                    </div>
-                    <span class="stat-value">24</span>
-                    <span class="stat-subtext"><span class="stat-trend positive">+3</span> this week</span>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>Completed</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
-                    </div>
-                    <span class="stat-value">18</span>
-                    <span class="stat-subtext">75% done</span>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>In Progress</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                    </div>
-                    <span class="stat-value">4</span>
-                    <span class="stat-subtext">On track</span>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>Productivity</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-                    </div>
-                    <span class="stat-value">92%</span>
-                    <span class="stat-subtext"><span class="stat-trend positive">+8%</span> vs last week</span>
-                </div>
-            </div>
-            
-            <!-- Centered Task List -->
-            <div class="tasks-area">
-                <div class="tasks-toolbar">
-                    <div class="tasks-title">
-                        <h2>Your Tasks</h2>
-                    </div>
-                    <div class="tasks-filters">
-                        <span class="active">All</span>
-                        <span>Active</span>
-                        <span>Completed</span>
-                        <span style="display:flex; align-items:center;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="tasks-list">
-                    <!-- Task 1 -->
-                    <div class="task-item">
-                        <div class="task-checkbox-container">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                        <div class="task-content">
-                            <h3 class="task-name">Complete project proposal</h3>
-                            <p class="task-description">Draft the Q2 product roadmap and present to stakeholders</p>
-                            <div class="task-metadata">
-                                <span class="task-tag tag-work">Work</span>
-                                <span class="task-due">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                    Today
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Task 2 -->
-                    <div class="task-item">
-                        <div class="task-checkbox-container">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                        <div class="task-content">
-                            <h3 class="task-name">Schedule dentist appointment</h3>
-                            <p class="task-description">Annual checkup and cleaning</p>
-                            <div class="task-metadata">
-                                <span class="task-tag tag-health">Health</span>
-                                <span class="task-due">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                    Tomorrow
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Task 3 -->
-                    <div class="task-item">
-                        <div class="task-checkbox-container">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                        <div class="task-content">
-                            <h3 class="task-name">Review React documentation</h3>
-                            <p class="task-description">Study the new Server Components patterns</p>
-                            <div class="task-metadata">
-                                <span class="task-tag tag-learning">Learning</span>
-                                <span class="task-due">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                    Mar 22
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Task 4 (Completed) -->
-                    <div class="task-item completed">
-                        <div class="task-checkbox-container">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                        </div>
-                        <div class="task-content">
-                            <h3 class="task-name">Buy groceries</h3>
-                            <p class="task-description">Vegetables, fruits, and snacks for the week</p>
-                            <div class="task-metadata">
-                                <span class="task-tag tag-personal">Personal</span>
-                                <span class="task-due">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                                    Today
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
+        </div>
+        <div class="form-group">
+            <label for="taskTitle">Title *</label>
+            <input class="form-input" id="taskTitle" type="text" placeholder="What needs to be done?" maxlength="120" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="taskDescription">Description</label>
+            <textarea class="form-textarea" id="taskDescription" placeholder="Optional details..." maxlength="500"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="taskStatus">Initial Status</label>
+            <select class="form-select" id="taskStatus">
+                <option value="TODO">To Do</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" id="cancelModalBtn">Cancel</button>
+            <button class="btn-create" id="createTaskBtn">Create Task</button>
+        </div>
     </div>
+</div>
 
-    <!-- Scripts -->
-    <script type="module" src="/js/auth.js"></script>
-    <script type="module">
-        import { setupAuthStateObserver } from '/js/auth.js';
-        
-        setupAuthStateObserver((user) => {
-            // User is logged in
-            const welcomeMessage = document.getElementById('welcomeMessage');
-            const displayName = user.displayName || 'Guest';
-            
-            // Set dynamic greeting based on time of day
-            const hour = new Date().getHours();
-            let greeting = "Good evening";
-            if (hour < 12) greeting = "Good morning";
-            else if (hour < 18) greeting = "Good afternoon";
-            
-            welcomeMessage.textContent = `${greeting}, ${displayName}`;
-            
-            // Display Avatar Letter
-            const avatarDisplay = document.getElementById('avatarDisplay');
-            if (avatarDisplay) {
-                avatarDisplay.textContent = displayName.charAt(0).toUpperCase();
+
+<script type="module">
+import { setupAuthStateObserver, logoutUser } from '/js/auth.js';
+import { createTask, loadTasks, updateTaskStatus, deleteTask, nextStatus } from '/js/tasks.js';
+
+// ── State ────────────────────────────────────────────────────
+let currentUser = null;
+let allTasks = [];
+let activeFilter = 'ALL';
+let unsubscribeTasks = null;
+
+// Tracks task IDs whose status just changed (for flash animation)
+let recentlyChangedIds = new Set();
+// Tracks previous status per task ID (to detect changes across onSnapshot calls)
+let prevStatusMap = {};
+// Tracks the ID pending inline delete confirmation
+let pendingDeleteId = null;
+// Previous stat values for animated counter
+let prevStats = { total: null, todo: null, inProgress: null, done: null };
+
+// ── Helpers ──────────────────────────────────────────────────
+function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function formatDate(ts) {
+    if (!ts) return '';
+    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+const STATUS_LABEL = { TODO: 'To Do', IN_PROGRESS: 'In Progress', DONE: 'Done' };
+const STATUS_CLASS = { TODO: 'todo', IN_PROGRESS: 'in-progress', DONE: 'done' };
+const NEXT_LABEL   = { TODO: 'Start →', IN_PROGRESS: 'Done ✓', DONE: 'Reopen' };
+
+// ── Animated number counter ──────────────────────────────────
+function animateCounter(el, from, to) {
+    if (from === to || from === null) {
+        el.textContent = to;
+        return;
+    }
+    const duration = 350; // ms
+    const start = performance.now();
+    function step(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
+        el.textContent = Math.round(from + (to - from) * eased);
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = to;
+    }
+    requestAnimationFrame(step);
+    // pop animation
+    el.classList.remove('popping');
+    void el.offsetWidth; // reflow to restart
+    el.classList.add('popping');
+    el.addEventListener('animationend', () => el.classList.remove('popping'), { once: true });
+}
+
+// ── Update Stats ─────────────────────────────────────────────
+function updateStats(tasks) {
+    const total = tasks.length;
+    const todo  = tasks.filter(t => t.status === 'TODO').length;
+    const ip    = tasks.filter(t => t.status === 'IN_PROGRESS').length;
+    const done  = tasks.filter(t => t.status === 'DONE').length;
+    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
+
+    animateCounter(document.getElementById('statTotal'),      prevStats.total,     total);
+    animateCounter(document.getElementById('statTodo'),       prevStats.todo,      todo);
+    animateCounter(document.getElementById('statInProgress'), prevStats.inProgress, ip);
+    animateCounter(document.getElementById('statDone'),       prevStats.done,      done);
+    document.getElementById('statDonePercent').textContent = `${pct}% complete`;
+
+    prevStats = { total, todo, inProgress: ip, done };
+
+    document.getElementById('sidebarTodoCount').textContent = todo;
+    document.getElementById('sidebarInProgressCount').textContent = ip;
+    document.getElementById('sidebarDoneCount').textContent = done;
+}
+
+// ── Render Tasks ─────────────────────────────────────────────
+function renderTasks(tasks) {
+    const container = document.getElementById('tasksList');
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
+
+    const filtered = tasks.filter(t => {
+        const matchFilter = activeFilter === 'ALL' || t.status === activeFilter;
+        const matchSearch = !search ||
+            t.title.toLowerCase().includes(search) ||
+            (t.description && t.description.toLowerCase().includes(search));
+        return matchFilter && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+        container.innerHTML = `
+            <div class="tasks-empty">
+                <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 1rem">
+                    <path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                </svg>
+                <p>${tasks.length === 0 ? 'No tasks yet. Add your first one!' : 'No tasks match this filter.'}</p>
+                ${tasks.length === 0 ? '<button class="btn-create" id="emptyAddBtn" style="margin:0 auto;display:block;">+ Add Task</button>' : ''}
+            </div>`;
+        document.getElementById('emptyAddBtn')?.addEventListener('click', openModal);
+        return;
+    }
+
+    container.innerHTML = filtered.map(task => {
+        const sc  = STATUS_CLASS[task.status] || '';
+        const isConfirming = pendingDeleteId === task.id;
+        const isChanged    = recentlyChangedIds.has(task.id);
+
+        // Build the inline delete-confirm row if this task is being confirmed
+        const deleteRow = isConfirming
+            ? `<div class="delete-confirm-row">
+                 Delete this task?
+                 <button class="btn-delete-confirm" data-confirm-delete="${task.id}">Yes, delete</button>
+                 <button class="btn-delete-cancel" data-cancel-delete="${task.id}">Cancel</button>
+               </div>`
+            : '';
+
+        return `
+        <div class="task-item ${sc}${isConfirming ? ' confirm-delete' : ''}${isChanged ? ' status-changed' : ''}" data-id="${task.id}">
+            <div class="task-content">
+                <h3 class="task-name">${escapeHtml(task.title)}</h3>
+                ${task.description ? `<p class="task-description">${escapeHtml(task.description)}</p>` : ''}
+                <div class="task-metadata">
+                    <span class="status-badge ${sc}">${STATUS_LABEL[task.status] || task.status}</span>
+                    <button class="next-status-btn" data-next="${task.id}" title="Advance to next status">
+                        ${NEXT_LABEL[task.status] || '→'}
+                    </button>
+                    <span class="task-created-at">Created ${formatDate(task.createdAt)}</span>
+                </div>
+                ${deleteRow}
+            </div>
+            <button class="task-delete-btn" data-delete="${task.id}" title="Delete task">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path>
+                </svg>
+            </button>
+        </div>`;
+    }).join('');
+
+    // Clear flash set after render (animation already applied via class)
+    recentlyChangedIds.clear();
+
+    // ── Status badge click (shows current state label, cycles on click) ──
+    container.querySelectorAll('.status-badge').forEach(badge => {
+        badge.addEventListener('click', () => advanceStatus(badge.closest('.task-item').dataset.id));
+    });
+
+    // ── "Next →" explicit button ──────────────────────────────
+    container.querySelectorAll('[data-next]').forEach(btn => {
+        btn.addEventListener('click', () => advanceStatus(btn.dataset.next));
+    });
+
+    // ── Delete: first click shows inline confirm ───────────────
+    container.querySelectorAll('[data-delete]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.delete;
+            if (pendingDeleteId === id) return; // already confirming
+            pendingDeleteId = id;
+            renderTasks(allTasks); // re-render with confirm row visible
+        });
+    });
+
+    // ── Confirm delete ────────────────────────────────────────
+    container.querySelectorAll('[data-confirm-delete]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.confirmDelete;
+            btn.textContent = 'Deleting...';
+            btn.disabled = true;
+            try {
+                await deleteTask(currentUser.uid, id);
+                pendingDeleteId = null;
+                // onSnapshot will fire and re-render automatically
+            } catch(e) {
+                console.error('Delete failed:', e);
+                pendingDeleteId = null;
+                renderTasks(allTasks);
             }
+        });
+    });
 
-            // Set current date
-            const dateOptions = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
-            
-        }, () => {
-            // User is logged out, redirect to login
-            window.location.href = '/login';
+    // ── Cancel delete ─────────────────────────────────────────
+    container.querySelectorAll('[data-cancel-delete]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            pendingDeleteId = null;
+            renderTasks(allTasks);
+        });
+    });
+}
+
+// ── Advance status with flash animation ──────────────────────
+async function advanceStatus(taskId) {
+    const task = allTasks.find(t => t.id === taskId);
+    if (!task || !currentUser) return;
+    const newStatus = nextStatus(task.status);
+    // Pre-mark for flash so the next render shows the animation
+    recentlyChangedIds.add(taskId);
+    try {
+        await updateTaskStatus(currentUser.uid, taskId, newStatus);
+        // onSnapshot fires → renderTasks → picks up recentlyChangedIds
+    } catch(e) {
+        console.error('Status update failed:', e);
+        recentlyChangedIds.delete(taskId);
+    }
+}
+
+// ── Modal ────────────────────────────────────────────────────
+function openModal() {
+    document.getElementById('addTaskModal').classList.add('open');
+    setTimeout(() => document.getElementById('taskTitle').focus(), 50);
+}
+function closeModal() {
+    document.getElementById('addTaskModal').classList.remove('open');
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDescription').value = '';
+    document.getElementById('taskStatus').value = 'TODO';
+    const btn = document.getElementById('createTaskBtn');
+    btn.disabled = false;
+    btn.textContent = 'Create Task';
+}
+
+document.getElementById('openModalBtn').addEventListener('click', openModal);
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+document.getElementById('addTaskModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+document.getElementById('createTaskBtn').addEventListener('click', async () => {
+    const title = document.getElementById('taskTitle').value.trim();
+    if (!title) { document.getElementById('taskTitle').focus(); return; }
+    const description = document.getElementById('taskDescription').value.trim();
+    const status = document.getElementById('taskStatus').value;
+    const btn = document.getElementById('createTaskBtn');
+    btn.disabled = true;
+    btn.textContent = 'Creating...';
+    try {
+        await createTask(currentUser.uid, { title, description, status });
+        closeModal();
+    } catch(e) {
+        console.error('Create failed:', e);
+        btn.disabled = false;
+        btn.textContent = 'Create Task';
+    }
+});
+
+// ── Filters & Search ─────────────────────────────────────────
+document.querySelectorAll('.tasks-filters span').forEach(span => {
+    span.addEventListener('click', () => {
+        document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.remove('active'));
+        span.classList.add('active');
+        activeFilter = span.dataset.filter;
+        renderTasks(allTasks);
+    });
+});
+['filterAll','filterTodo','filterInProgress','filterDone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+        const m = { filterAll:'ALL', filterTodo:'TODO', filterInProgress:'IN_PROGRESS', filterDone:'DONE' };
+        activeFilter = m[id];
+        document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.toggle('active', s.dataset.filter === activeFilter));
+        renderTasks(allTasks);
+    });
+});
+document.getElementById('searchInput').addEventListener('input', () => renderTasks(allTasks));
+
+// ── Logout ───────────────────────────────────────────────────
+document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+
+// ── Auth + Live Task Subscription ───────────────────────────
+// NOTE: onSnapshot's FIRST emission always returns ALL existing documents from
+// Firestore for that user — so existing users' tasks are always fetched
+// immediately on login with zero extra logic needed.
+setupAuthStateObserver(user => {
+    currentUser = user;
+    const displayName = user.displayName || (user.isAnonymous ? 'Guest' : 'User');
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('welcomeMessage').textContent = `${greeting}, ${displayName}`;
+    document.getElementById('avatarDisplay').textContent = displayName.charAt(0).toUpperCase();
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US',
+        { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+    if (unsubscribeTasks) unsubscribeTasks();
+    unsubscribeTasks = loadTasks(user.uid, tasks => {
+        // Detect which tasks changed status since last render
+        tasks.forEach(t => {
+            if (prevStatusMap[t.id] !== undefined && prevStatusMap[t.id] !== t.status) {
+                recentlyChangedIds.add(t.id);
+            }
+            prevStatusMap[t.id] = t.status;
         });
 
-        // Toggle task completion visual state (for demo purposes)
-        document.querySelectorAll('.task-item').forEach(item => {
-            const checkbox = item.querySelector('.task-checkbox-container');
-            checkbox.addEventListener('click', () => {
-                item.classList.toggle('completed');
-            });
-        });
-    </script>
-    <script src="/js/cursor.js"></script>
+        allTasks = tasks;
+        updateStats(tasks);
+        renderTasks(tasks);
+    });
+
+}, () => {
+    if (unsubscribeTasks) unsubscribeTasks();
+    window.location.href = '/login';
+});
+</script>
+<script src="/js/cursor.js"></script>
 </body>
 </html>
