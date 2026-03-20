@@ -4,13 +4,13 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC1mNUcJYtAZSi4r_UNgP_7hjU0ypggwMs",
-  authDomain: "doneright-2205.firebaseapp.com",
-  projectId: "doneright-2205",
-  storageBucket: "doneright-2205.firebasestorage.app",
-  messagingSenderId: "945292851709",
-  appId: "1:945292851709:web:8be7912a5768c985b18194",
-  measurementId: "G-QV7PFW0W3R"
+    apiKey: "AIzaSyC1mNUcJYtAZSi4r_UNgP_7hjU0ypggwMs",
+    authDomain: "doneright-2205.firebaseapp.com",
+    projectId: "doneright-2205",
+    storageBucket: "doneright-2205.firebasestorage.app",
+    messagingSenderId: "945292851709",
+    appId: "1:945292851709:web:8be7912a5768c985b18194",
+    measurementId: "G-QV7PFW0W3R"
 };
 
 // Initialize Firebase
@@ -57,7 +57,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (linkError.code === 'auth/credential-already-in-use') {
                             console.log("Existing Google user. Log out of Guest to discard sync state, and sign in directly.");
                             await signOut(auth);
-                            
+
                             // Sign in via Google normally
                             const result = await signInWithPopup(auth, googleProvider);
                             await ensureUserDocument(result.user);
