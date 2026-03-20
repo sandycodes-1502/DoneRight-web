@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
-import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInAnonymously, onAuthStateChanged, signOut, linkWithPopup } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js";
+import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -28,23 +28,12 @@ export async function logoutUser() {
     }
 }
 
-async function saveUserToFirestore(user, isGuest) {
+// Android stores no fields on the user document itself, just its subcollections.
+async function ensureUserDocument(user) {
     const userRef = doc(db, 'users', user.uid);
     const docSnap = await getDoc(userRef);
-    
-    // Only create a new document if it doesn't already exist
     if (!docSnap.exists()) {
-        await setDoc(userRef, {
-            uid: user.uid,
-            email: user.email || null,
-            displayName: user.displayName || (isGuest ? 'Guest User' : 'Unknown'),
-            isGuest: isGuest,
-            createdAt: serverTimestamp(),
-            lastLogin: serverTimestamp()
-        });
-    } else {
-        // Update last login
-        await setDoc(userRef, { lastLogin: serverTimestamp() }, { merge: true });
+        await setDoc(userRef, {}, { merge: true }); // Empty placeholder
     }
 }
 
@@ -56,13 +45,37 @@ document.addEventListener('DOMContentLoaded', () => {
     if (googleBtn) {
         googleBtn.addEventListener('click', async () => {
             try {
+                // If user is already a guest, link the account
+                if (auth.currentUser && auth.currentUser.isAnonymous) {
+                    try {
+                        const result = await linkWithPopup(auth.currentUser, googleProvider);
+                        console.log("Successfully linked guest account to Google!");
+                        await ensureUserDocument(result.user);
+                        window.location.replace('/dashboard');
+                        return; // Exit here on success
+                    } catch (linkError) {
+                        if (linkError.code === 'auth/credential-already-in-use') {
+                            console.log("Existing Google user. Log out of Guest to discard sync state, and sign in directly.");
+                            await signOut(auth);
+                            
+                            // Sign in via Google normally
+                            const result = await signInWithPopup(auth, googleProvider);
+                            await ensureUserDocument(result.user);
+                            window.location.replace('/dashboard');
+                            return; // Exit here on success
+                        } else {
+                            throw linkError;
+                        }
+                    }
+                }
+
+                // Normal Sign In
                 const result = await signInWithPopup(auth, googleProvider);
-                console.log("Google sign in success:", result.user);
-                await saveUserToFirestore(result.user, false);
-                window.location.href = '/dashboard';
+                await ensureUserDocument(result.user);
+                window.location.replace('/dashboard');
             } catch (error) {
                 console.error("Error signing in with Google:", error);
-                alert("Failed to sign in with Google. Please try again.");
+                alert("Failed to sign in. Please try again.");
             }
         });
     }
@@ -71,9 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
         guestBtn.addEventListener('click', async () => {
             try {
                 const result = await signInAnonymously(auth);
-                console.log("Guest sign in success:", result.user);
-                await saveUserToFirestore(result.user, true);
-                window.location.href = '/dashboard';
+                await ensureUserDocument(result.user);
+                window.location.replace('/dashboard');
             } catch (error) {
                 console.error("Error signing in as guest:", error);
                 alert("Failed to sign in as guest. Please try again.");
