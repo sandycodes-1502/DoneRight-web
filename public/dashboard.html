@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - DoneRight</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/globals.css">
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
@@ -14,12 +16,7 @@
     <!-- ── Sidebar ─────────────────────────────────────────────── -->
     <aside class="dashboard-sidebar">
         <a href="/" class="sidebar-logo">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
-                <polyline points="4 14 8 18 14 8"></polyline>
-                <line x1="16" y1="8" x2="22" y2="8"></line>
-                <line x1="16" y1="13" x2="22" y2="13"></line>
-                <line x1="16" y1="18" x2="22" y2="18"></line>
-            </svg>
+            <img src="/images/logo.svg" alt="DoneRight" width="32" height="32" style="border-radius:8px">
             <span>DoneRight</span>
         </a>
 
@@ -67,6 +64,7 @@
             <div class="dashboard-greeting">
                 <h1 id="welcomeMessage">Loading...</h1>
                 <p id="currentDate"></p>
+                <span id="liveTime" style="font-size:0.8rem;opacity:0.45;letter-spacing:0.04em;font-variant-numeric:tabular-nums;"></span>
             </div>
             <div class="dashboard-actions">
                 <input type="text" id="searchInput" class="search-input" placeholder="Search tasks...">
@@ -124,10 +122,28 @@
                     <span data-filter="DONE">Done</span>
                 </div>
             </div>
-            <div id="tasksList">
-                <div class="tasks-loading">
-                    <div class="spinner"></div>
-                    Loading your tasks...
+            
+            <div class="tasks-content-wrapper" style="display: flex; gap: 2rem; align-items: flex-start;">
+                <div id="tasksList" style="flex: 1; min-width: 0;">
+                    <div class="tasks-loading">
+                        <div class="spinner"></div>
+                        Loading your tasks...
+                    </div>
+                </div>
+                
+                <div class="dashboard-widget-col" style="width: 300px; flex-shrink: 0;">
+                    <div class="quote-widget" id="quoteWidget">
+                        <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                        <div class="quote-loading">
+                            <div class="spinner" style="width:20px;height:20px;border-width:2px;border-top-color:var(--accent-primary);"></div>
+                        </div>
+                        <div class="quote-content" style="display:none;">
+                            <p class="quote-text" id="quoteText">Loading...</p>
+                            <p class="quote-author" id="quoteAuthor">Unknown</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -170,61 +186,107 @@
 
 <script type="module">
 import { setupAuthStateObserver, logoutUser } from '/js/auth.js';
-import { createTask, loadTasks, updateTaskStatus, deleteTask, nextStatus } from '/js/tasks.js';
+import { createTask, loadTasks, updateTaskStatus, updateTask, deleteTask, nextStatus } from '/js/tasks.js';
 
-// ── State ────────────────────────────────────────────────────
+// ── State ─────────────────────────────────────────────────────
 let currentUser = null;
 let allTasks = [];
 let activeFilter = 'ALL';
 let unsubscribeTasks = null;
-
-// Tracks task IDs whose status just changed (for flash animation)
 let recentlyChangedIds = new Set();
-// Tracks previous status per task ID (to detect changes across onSnapshot calls)
 let prevStatusMap = {};
-// Tracks the ID pending inline delete confirmation
 let pendingDeleteId = null;
-// Previous stat values for animated counter
+let editingTaskId = null;        // ID of task being inline-edited
 let prevStats = { total: null, todo: null, inProgress: null, done: null };
 
-// ── Helpers ──────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────
 function escapeHtml(str) {
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
-
 function formatDate(ts) {
     if (!ts) return '';
     return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 }
-
 const STATUS_LABEL = { TODO: 'To Do', IN_PROGRESS: 'In Progress', DONE: 'Done' };
 const STATUS_CLASS = { TODO: 'todo', IN_PROGRESS: 'in-progress', DONE: 'done' };
 const NEXT_LABEL   = { TODO: 'Start →', IN_PROGRESS: 'Done ✓', DONE: 'Reopen' };
+const STATUS_ORDER = { TODO: 0, IN_PROGRESS: 1, DONE: 2 };
 
-// ── Animated number counter ──────────────────────────────────
-function animateCounter(el, from, to) {
-    if (from === to || from === null) {
-        el.textContent = to;
-        return;
-    }
-    const duration = 350; // ms
-    const start = performance.now();
-    function step(now) {
-        const t = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - t, 3); // ease-out cubic
-        el.textContent = Math.round(from + (to - from) * eased);
-        if (t < 1) requestAnimationFrame(step);
-        else el.textContent = to;
-    }
-    requestAnimationFrame(step);
-    // pop animation
-    el.classList.remove('popping');
-    void el.offsetWidth; // reflow to restart
-    el.classList.add('popping');
-    el.addEventListener('animationend', () => el.classList.remove('popping'), { once: true });
+// ── Sort: TODO first, IN_PROGRESS second, DONE last ──────────
+function sortTasks(tasks) {
+    return [...tasks].sort((a, b) => {
+        const diff = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+        if (diff !== 0) return diff;
+        return (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt); // within same group, most recently touched first
+    });
 }
 
-// ── Update Stats ─────────────────────────────────────────────
+// ── Animated stat counter ─────────────────────────────────────
+// ── Flip-clock digit animation ───────────────────────────────
+// Creates the premium mechanical flip effect: the element does a
+// brief 3D Y-rotation, showing the new value on the flip-back.
+// ── Slide counter (odometer-style) ────────────────────────────
+// Numbers slide UP when value increases, DOWN when value decreases.
+function animateCounter(el, from, to) {
+    if (to === undefined || to === null) return;
+    if (from === to || from === null) { el.textContent = to; return; }
+
+    const goingUp = to > from;
+    const dur = 200; // ms
+
+    // Wrap in a clipping div on first use
+    if (!el.classList.contains('slide-digit')) {
+        el.classList.add('slide-digit');
+        el.style.display = 'inline-block';
+        el.style.overflow = 'hidden';
+        el.style.verticalAlign = 'middle';
+    }
+
+    // Position incoming value offscreen in the opposite direction
+    const startY = goingUp ? '100%' : '-100%';  // slides in from below if up, from above if down
+    const exitY  = goingUp ? '-100%' : '100%';  // old value exits to opposite side
+
+    // Create the incoming span
+    const next = document.createElement('span');
+    next.textContent = to;
+    next.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(${startY});`;
+
+    // Wrap the current text in a span if not yet wrapped
+    let current = el.querySelector('.slide-current');
+    if (!current) {
+        current = document.createElement('span');
+        current.className = 'slide-current';
+        current.textContent = el.textContent || from;
+        el.textContent = '';
+        el.style.position = 'relative';
+        el.style.lineHeight = 'inherit';
+        // Match the outer element's height to clip properly
+        el.style.height = '1em';
+        el.appendChild(current);
+    }
+    current.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(0);`;
+
+    next.className = 'slide-next';
+    el.appendChild(next);
+
+    // Trigger animation on next frame
+    requestAnimationFrame(() => {
+        const transition = `transform ${dur}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+        current.style.transition = transition;
+        next.style.transition = transition;
+        current.style.transform = `translateY(${exitY})`;
+        next.style.transform = 'translateY(0)';
+
+        setTimeout(() => {
+            // Promote next to current, clean up
+            current.remove();
+            next.className = 'slide-current';
+            next.style.transition = '';
+        }, dur + 20);
+    });
+}
+
+// ── Update Stats ──────────────────────────────────────────────
 function updateStats(tasks) {
     const total = tasks.length;
     const todo  = tasks.filter(t => t.status === 'TODO').length;
@@ -232,12 +294,11 @@ function updateStats(tasks) {
     const done  = tasks.filter(t => t.status === 'DONE').length;
     const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
 
-    animateCounter(document.getElementById('statTotal'),      prevStats.total,     total);
-    animateCounter(document.getElementById('statTodo'),       prevStats.todo,      todo);
+    animateCounter(document.getElementById('statTotal'),      prevStats.total,      total);
+    animateCounter(document.getElementById('statTodo'),       prevStats.todo,       todo);
     animateCounter(document.getElementById('statInProgress'), prevStats.inProgress, ip);
-    animateCounter(document.getElementById('statDone'),       prevStats.done,      done);
+    animateCounter(document.getElementById('statDone'),       prevStats.done,       done);
     document.getElementById('statDonePercent').textContent = `${pct}% complete`;
-
     prevStats = { total, todo, inProgress: ip, done };
 
     document.getElementById('sidebarTodoCount').textContent = todo;
@@ -245,18 +306,140 @@ function updateStats(tasks) {
     document.getElementById('sidebarDoneCount').textContent = done;
 }
 
-// ── Render Tasks ─────────────────────────────────────────────
+// ── DOM-diff helper: build HTML for a single task ─────────────
+function buildTaskHtml(task) {
+    const sc = STATUS_CLASS[task.status] || '';
+    const isConfirming = pendingDeleteId === task.id;
+    const isEditing = editingTaskId === task.id;
+    const isChanged = recentlyChangedIds.has(task.id);
+
+    const deleteRow = isConfirming
+        ? `<div class="delete-confirm-row">
+             Delete this task?
+             <button class="btn-delete-confirm" data-confirm-delete="${task.id}">Yes, delete</button>
+             <button class="btn-delete-cancel" data-cancel-delete="${task.id}">Cancel</button>
+           </div>`
+        : '';
+
+    const editRow = isEditing
+        ? `<div class="task-edit-row">
+             <input class="form-input task-edit-title" type="text" value="${escapeHtml(task.title)}" maxlength="120" placeholder="Task title">
+             <textarea class="form-textarea task-edit-desc" rows="2" maxlength="500" placeholder="Description (optional)">${escapeHtml(task.description || '')}</textarea>
+             <div class="task-edit-actions">
+               <button class="btn-create" data-save-edit="${task.id}" style="padding:0.4rem 1rem;font-size:0.8rem">Save</button>
+               <button class="btn-cancel" data-cancel-edit="${task.id}" style="padding:0.4rem 0.85rem;font-size:0.8rem">Cancel</button>
+             </div>
+           </div>`
+        : '';
+
+    // Serialise the "key" — only what affects the rendered card visually
+    // Editing / confirming states are always included so toggling re-renders the card
+    const key = [task.title, task.description || '', task.status,
+                 task.updatedAt || task.createdAt,
+                 isConfirming, isEditing, isChanged].join('|');
+
+    return { sc, isChanged, key, html: `
+    <div class="task-item ${sc}${isConfirming ? ' confirm-delete' : ''}${isChanged ? ' status-changed' : ''}" data-id="${task.id}" data-key="${escapeHtml(key)}">
+        <div class="task-content">
+            <h3 class="task-name">${escapeHtml(task.title)}</h3>
+            ${task.description && !isEditing ? `<p class="task-description">${escapeHtml(task.description)}</p>` : ''}
+            ${editRow}
+            ${isEditing ? '' : `<div class="task-metadata">
+                <span class="status-badge ${sc}">${STATUS_LABEL[task.status] || task.status}</span>
+                <button class="next-status-btn" data-next="${task.id}">
+                    ${NEXT_LABEL[task.status] || '→'}
+                </button>
+                <span class="task-created-at">Updated ${formatDate(task.updatedAt || task.createdAt)}</span>
+            </div>`}
+            ${deleteRow}
+        </div>
+        <div class="task-actions-col">
+            <button class="task-edit-btn" data-edit="${task.id}" title="Edit task">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                </svg>
+            </button>
+            <button class="task-delete-btn" data-delete="${task.id}" title="Delete task">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
+                    <path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path>
+                </svg>
+            </button>
+        </div>
+    </div>` };
+}
+
+// ── DOM diff: patch only what changed (like DiffUtil) ─────────
+function patchTaskList(container, filteredTasks) {
+    const existing = new Map();
+    container.querySelectorAll('.task-item[data-id]').forEach(el => {
+        existing.set(el.dataset.id, el);
+    });
+
+    const ordered = [];
+    filteredTasks.forEach(task => {
+        const { key, html, isChanged } = buildTaskHtml(task);
+        let el = existing.get(task.id);
+
+        if (!el) {
+            // New task — create and animate in
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            el = wrapper.firstChild;
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(8px)';
+            container.appendChild(el);
+            requestAnimationFrame(() => {
+                el.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+        } else if (el.dataset.key !== key) {
+            // Card data changed — patch innerHTML only
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            const newEl = wrapper.firstChild;
+            el.className = newEl.className;
+            el.dataset.key = key;
+            el.innerHTML = newEl.innerHTML;
+            // Trigger status-change flash if needed
+            if (isChanged) {
+                el.classList.add('status-changed');
+                el.addEventListener('animationend', () => el.classList.remove('status-changed'), { once: true });
+            }
+        }
+        existing.delete(task.id); // mark as kept
+        ordered.push(el);
+    });
+
+    // Remove stale cards (deleted tasks) with fade-out
+    existing.forEach(el => {
+        el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-6px)';
+        setTimeout(() => el.remove(), 200);
+    });
+
+    // Re-order DOM to match sorted order (without removing/re-adding)
+    ordered.forEach((el, i) => {
+        if (container.children[i] !== el) container.insertBefore(el, container.children[i] || null);
+    });
+}
+
+// ── Render Tasks ──────────────────────────────────────────────
 function renderTasks(tasks) {
     const container = document.getElementById('tasksList');
     const search = document.getElementById('searchInput').value.toLowerCase().trim();
 
-    const filtered = tasks.filter(t => {
+    const filtered = sortTasks(tasks.filter(t => {
         const matchFilter = activeFilter === 'ALL' || t.status === activeFilter;
         const matchSearch = !search ||
             t.title.toLowerCase().includes(search) ||
             (t.description && t.description.toLowerCase().includes(search));
         return matchFilter && matchSearch;
-    });
+    }));
 
     if (filtered.length === 0) {
         container.innerHTML = `
@@ -271,77 +454,77 @@ function renderTasks(tasks) {
         return;
     }
 
-    container.innerHTML = filtered.map(task => {
-        const sc  = STATUS_CLASS[task.status] || '';
-        const isConfirming = pendingDeleteId === task.id;
-        const isChanged    = recentlyChangedIds.has(task.id);
-
-        // Build the inline delete-confirm row if this task is being confirmed
-        const deleteRow = isConfirming
-            ? `<div class="delete-confirm-row">
-                 Delete this task?
-                 <button class="btn-delete-confirm" data-confirm-delete="${task.id}">Yes, delete</button>
-                 <button class="btn-delete-cancel" data-cancel-delete="${task.id}">Cancel</button>
-               </div>`
-            : '';
-
-        return `
-        <div class="task-item ${sc}${isConfirming ? ' confirm-delete' : ''}${isChanged ? ' status-changed' : ''}" data-id="${task.id}">
-            <div class="task-content">
-                <h3 class="task-name">${escapeHtml(task.title)}</h3>
-                ${task.description ? `<p class="task-description">${escapeHtml(task.description)}</p>` : ''}
-                <div class="task-metadata">
-                    <span class="status-badge ${sc}">${STATUS_LABEL[task.status] || task.status}</span>
-                    <button class="next-status-btn" data-next="${task.id}" title="Advance to next status">
-                        ${NEXT_LABEL[task.status] || '→'}
-                    </button>
-                    <span class="task-created-at">Created ${formatDate(task.createdAt)}</span>
-                </div>
-                ${deleteRow}
-            </div>
-            <button class="task-delete-btn" data-delete="${task.id}" title="Delete task">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="3 6 5 6 21 6"></polyline>
-                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
-                    <path d="M10 11v6M14 11v6"></path><path d="M9 6V4h6v2"></path>
-                </svg>
-            </button>
-        </div>`;
-    }).join('');
-
-    // Clear flash set after render (animation already applied via class)
+    // Use DOM diff — only touch what changed
+    // Make sure to clear loading or empty states first since patchTaskList only manages task cards
+    container.querySelector('.tasks-loading')?.remove();
+    container.querySelector('.tasks-empty')?.remove();
+    
+    patchTaskList(container, filtered);
     recentlyChangedIds.clear();
 
-    // ── Status badge click (shows current state label, cycles on click) ──
-    container.querySelectorAll('.status-badge').forEach(badge => {
-        badge.addEventListener('click', () => advanceStatus(badge.closest('.task-item').dataset.id));
-    });
 
-    // ── "Next →" explicit button ──────────────────────────────
+    // ── Next status button only (no badge click) ──────────────
     container.querySelectorAll('[data-next]').forEach(btn => {
         btn.addEventListener('click', () => advanceStatus(btn.dataset.next));
     });
 
-    // ── Delete: first click shows inline confirm ───────────────
-    container.querySelectorAll('[data-delete]').forEach(btn => {
+    // ── Edit button ───────────────────────────────────────────
+    container.querySelectorAll('[data-edit]').forEach(btn => {
         btn.addEventListener('click', () => {
-            const id = btn.dataset.delete;
-            if (pendingDeleteId === id) return; // already confirming
-            pendingDeleteId = id;
-            renderTasks(allTasks); // re-render with confirm row visible
+            editingTaskId = btn.dataset.edit === editingTaskId ? null : btn.dataset.edit;
+            pendingDeleteId = null;
+            renderTasks(allTasks);
         });
     });
 
-    // ── Confirm delete ────────────────────────────────────────
+    // ── Save edit ─────────────────────────────────────────────
+    container.querySelectorAll('[data-save-edit]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.saveEdit;
+            const card = btn.closest('.task-item');
+            const title = card.querySelector('.task-edit-title')?.value.trim();
+            const description = card.querySelector('.task-edit-desc')?.value.trim();
+            if (!title) { card.querySelector('.task-edit-title')?.focus(); return; }
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
+            try {
+                await updateTask(currentUser.uid, id, { title, description });
+                editingTaskId = null;
+                // onSnapshot re-renders automatically
+            } catch(e) {
+                console.error('Edit save failed:', e);
+                btn.textContent = 'Save';
+                btn.disabled = false;
+            }
+        });
+    });
+
+    // ── Cancel edit ───────────────────────────────────────────
+    container.querySelectorAll('[data-cancel-edit]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            editingTaskId = null;
+            renderTasks(allTasks);
+        });
+    });
+
+    // ── Delete: first click = inline confirm ──────────────────
+    container.querySelectorAll('[data-delete]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.delete;
+            if (pendingDeleteId === id) return;
+            pendingDeleteId = id;
+            editingTaskId = null;
+            renderTasks(allTasks);
+        });
+    });
+
     container.querySelectorAll('[data-confirm-delete]').forEach(btn => {
         btn.addEventListener('click', async () => {
             const id = btn.dataset.confirmDelete;
-            btn.textContent = 'Deleting...';
-            btn.disabled = true;
+            btn.textContent = 'Deleting...'; btn.disabled = true;
             try {
                 await deleteTask(currentUser.uid, id);
                 pendingDeleteId = null;
-                // onSnapshot will fire and re-render automatically
             } catch(e) {
                 console.error('Delete failed:', e);
                 pendingDeleteId = null;
@@ -350,7 +533,6 @@ function renderTasks(tasks) {
         });
     });
 
-    // ── Cancel delete ─────────────────────────────────────────
     container.querySelectorAll('[data-cancel-delete]').forEach(btn => {
         btn.addEventListener('click', () => {
             pendingDeleteId = null;
@@ -359,23 +541,20 @@ function renderTasks(tasks) {
     });
 }
 
-// ── Advance status with flash animation ──────────────────────
+// ── Advance status with flash animation ───────────────────────
 async function advanceStatus(taskId) {
     const task = allTasks.find(t => t.id === taskId);
     if (!task || !currentUser) return;
-    const newStatus = nextStatus(task.status);
-    // Pre-mark for flash so the next render shows the animation
     recentlyChangedIds.add(taskId);
     try {
-        await updateTaskStatus(currentUser.uid, taskId, newStatus);
-        // onSnapshot fires → renderTasks → picks up recentlyChangedIds
+        await updateTaskStatus(currentUser.uid, taskId, nextStatus(task.status));
     } catch(e) {
         console.error('Status update failed:', e);
         recentlyChangedIds.delete(taskId);
     }
 }
 
-// ── Modal ────────────────────────────────────────────────────
+// ── Modal ─────────────────────────────────────────────────────
 function openModal() {
     document.getElementById('addTaskModal').classList.add('open');
     setTimeout(() => document.getElementById('taskTitle').focus(), 50);
@@ -386,15 +565,14 @@ function closeModal() {
     document.getElementById('taskDescription').value = '';
     document.getElementById('taskStatus').value = 'TODO';
     const btn = document.getElementById('createTaskBtn');
-    btn.disabled = false;
-    btn.textContent = 'Create Task';
+    btn.disabled = false; btn.textContent = 'Create Task';
 }
 
 document.getElementById('openModalBtn').addEventListener('click', openModal);
 document.getElementById('closeModalBtn').addEventListener('click', closeModal);
 document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
 document.getElementById('addTaskModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); editingTaskId = null; renderTasks(allTasks); } });
 
 document.getElementById('createTaskBtn').addEventListener('click', async () => {
     const title = document.getElementById('taskTitle').value.trim();
@@ -402,19 +580,17 @@ document.getElementById('createTaskBtn').addEventListener('click', async () => {
     const description = document.getElementById('taskDescription').value.trim();
     const status = document.getElementById('taskStatus').value;
     const btn = document.getElementById('createTaskBtn');
-    btn.disabled = true;
-    btn.textContent = 'Creating...';
+    btn.disabled = true; btn.textContent = 'Creating...';
     try {
         await createTask(currentUser.uid, { title, description, status });
         closeModal();
     } catch(e) {
         console.error('Create failed:', e);
-        btn.disabled = false;
-        btn.textContent = 'Create Task';
+        btn.disabled = false; btn.textContent = 'Create Task';
     }
 });
 
-// ── Filters & Search ─────────────────────────────────────────
+// ── Filters & Search ──────────────────────────────────────────
 document.querySelectorAll('.tasks-filters span').forEach(span => {
     span.addEventListener('click', () => {
         document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.remove('active'));
@@ -437,17 +613,41 @@ document.querySelectorAll('.tasks-filters span').forEach(span => {
     });
 });
 document.getElementById('searchInput').addEventListener('input', () => renderTasks(allTasks));
-
-// ── Logout ───────────────────────────────────────────────────
 document.getElementById('logoutBtn').addEventListener('click', logoutUser);
 
-// ── Auth + Live Task Subscription ───────────────────────────
-// NOTE: onSnapshot's FIRST emission always returns ALL existing documents from
-// Firestore for that user — so existing users' tasks are always fetched
-// immediately on login with zero extra logic needed.
+// ── Quote of the Day Widget ───────────────────────────────────
+async function loadQuoteOfTheDay() {
+    try {
+        const res = await fetch('https://www.quoterism.com/api/quotes/quote-of-the-day', {
+            headers: { 'X-API-Key': 'qtr_8maQEWjR4ZYNgMrrkS7R8ElFvzHBb07g' }
+        });
+        if (!res.ok) throw new Error('Failed to fetch quote');
+        const data = await res.json();
+        
+        document.querySelector('.quote-loading').style.display = 'none';
+        const contentDiv = document.querySelector('.quote-content');
+        contentDiv.style.display = 'block';
+        
+        document.getElementById('quoteText').textContent = `"${data.text}"`;
+        document.getElementById('quoteAuthor').textContent = `— ${data.author || 'Unknown'}`;
+        
+    } catch (e) {
+        console.error("Quote API error:", e);
+        document.querySelector('.quote-loading').style.display = 'none';
+        const contentDiv = document.querySelector('.quote-content');
+        contentDiv.style.display = 'block';
+        document.getElementById('quoteText').textContent = `"The only way to do great work is to love what you do."`;
+        document.getElementById('quoteAuthor').textContent = `— Steve Jobs`;
+    }
+}
+document.addEventListener('DOMContentLoaded', loadQuoteOfTheDay);
+
+// ── Auth + Live Subscription ──────────────────────────────────
 setupAuthStateObserver(user => {
     currentUser = user;
-    const displayName = user.displayName || (user.isAnonymous ? 'Guest' : 'User');
+    const displayName = user.displayName
+        || (user.isAnonymous ? 'Guest'
+            : (user.email ? user.email.split('@')[0] : 'User'));
     const hour = new Date().getHours();
     const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
     document.getElementById('welcomeMessage').textContent = `${greeting}, ${displayName}`;
@@ -455,25 +655,33 @@ setupAuthStateObserver(user => {
     document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US',
         { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
 
+    // Live clock — ticks every second
+    const clockEl = document.getElementById('liveTime');
+    if (window._clockInterval) clearInterval(window._clockInterval);
+    const tickClock = () => {
+        const now = new Date();
+        clockEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    };
+    tickClock();
+    window._clockInterval = setInterval(tickClock, 1000);
+
+
     if (unsubscribeTasks) unsubscribeTasks();
     unsubscribeTasks = loadTasks(user.uid, tasks => {
-        // Detect which tasks changed status since last render
         tasks.forEach(t => {
-            if (prevStatusMap[t.id] !== undefined && prevStatusMap[t.id] !== t.status) {
+            if (prevStatusMap[t.id] !== undefined && prevStatusMap[t.id] !== t.status)
                 recentlyChangedIds.add(t.id);
-            }
             prevStatusMap[t.id] = t.status;
         });
-
         allTasks = tasks;
         updateStats(tasks);
         renderTasks(tasks);
     });
-
 }, () => {
     if (unsubscribeTasks) unsubscribeTasks();
     window.location.href = '/login';
 });
+</script>
 </script>
 <script src="/js/cursor.js"></script>
 </body>

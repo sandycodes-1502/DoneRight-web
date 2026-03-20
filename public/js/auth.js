@@ -37,6 +37,26 @@ async function ensureUserDocument(user) {
     }
 }
 
+// Show an inline error message inside the auth card (no OS alert)
+function showAuthError(msg) {
+    let el = document.getElementById('authErrorMsg');
+    if (!el) {
+        el = document.createElement('p');
+        el.id = 'authErrorMsg';
+        el.style.cssText = 'color:#ef4444;font-size:0.85rem;text-align:center;margin-top:0.75rem;';
+        document.querySelector('.auth-card')?.appendChild(el);
+    }
+    el.textContent = msg;
+    setTimeout(() => { el.textContent = ''; }, 4000);
+}
+
+// Errors we should silently ignore (user closed the popup or it was cancelled)
+const SILENT_ERRORS = new Set([
+    'auth/popup-closed-by-user',
+    'auth/cancelled-popup-request',
+    'auth/user-cancelled',
+]);
+
 document.addEventListener('DOMContentLoaded', () => {
     const googleBtn = document.getElementById('googleSignInBtn');
     const guestBtn = document.getElementById('guestSignInBtn');
@@ -52,30 +72,30 @@ document.addEventListener('DOMContentLoaded', () => {
                         console.log("Successfully linked guest account to Google!");
                         await ensureUserDocument(result.user);
                         window.location.replace('/dashboard');
-                        return; // Exit here on success
+                        return;
                     } catch (linkError) {
+                        if (SILENT_ERRORS.has(linkError.code)) return; // user closed popup
                         if (linkError.code === 'auth/credential-already-in-use') {
-                            console.log("Existing Google user. Log out of Guest to discard sync state, and sign in directly.");
+                            console.log("Existing Google user — signing in directly.");
                             await signOut(auth);
-
-                            // Sign in via Google normally
                             const result = await signInWithPopup(auth, googleProvider);
                             await ensureUserDocument(result.user);
                             window.location.replace('/dashboard');
-                            return; // Exit here on success
+                            return;
                         } else {
                             throw linkError;
                         }
                     }
                 }
 
-                // Normal Sign In
+                // Normal sign in
                 const result = await signInWithPopup(auth, googleProvider);
                 await ensureUserDocument(result.user);
                 window.location.replace('/dashboard');
             } catch (error) {
+                if (SILENT_ERRORS.has(error.code)) return; // user closed popup
                 console.error("Error signing in with Google:", error);
-                alert("Failed to sign in. Please try again.");
+                showAuthError("Couldn't sign in with Google. Please try again.");
             }
         });
     }
@@ -88,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.replace('/dashboard');
             } catch (error) {
                 console.error("Error signing in as guest:", error);
-                alert("Failed to sign in as guest. Please try again.");
+                showAuthError("Couldn't sign in as guest. Please try again.");
             }
         });
     }
@@ -97,6 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         logoutBtn.addEventListener('click', logoutUser);
     }
 });
+
 
 // Setup auth state observer globally to assist UI
 export function setupAuthStateObserver(onLogin, onLogout) {
