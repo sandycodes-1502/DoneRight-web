@@ -264,6 +264,7 @@
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
+    min-height: 120px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
     transition: transform var(--transition-speed) ease;
 }
@@ -289,6 +290,8 @@
     margin-bottom: 0.25rem;
     line-height: 1;
     min-height: 2rem;
+    font-variant-numeric: tabular-nums;
+    transform-origin: center;
 }
 
 .stat-subtext {
