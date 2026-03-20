@@ -243,8 +243,8 @@ function animateCounter(el, from, to) {
     }
 
     // Position incoming value offscreen in the opposite direction
-    const startY = goingUp ? '100%' : '-100%';  // slides in from below if up, from above if down
-    const exitY  = goingUp ? '-100%' : '100%';  // old value exits to opposite side
+    const startY = goingUp ? '120%' : '-120%';  // slides in from below if up, from above if down
+    const exitY  = goingUp ? '-120%' : '120%';  // old value exits to opposite side
 
     // Create the incoming span
     const next = document.createElement('span');
@@ -261,7 +261,7 @@ function animateCounter(el, from, to) {
         el.style.position = 'relative';
         el.style.lineHeight = 'inherit';
         // Match the outer element's height to clip properly
-        el.style.height = '1em';
+        el.style.height = '1.2em';
         el.appendChild(current);
     }
     current.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(0);`;
@@ -618,9 +618,7 @@ document.getElementById('logoutBtn').addEventListener('click', logoutUser);
 // ── Quote of the Day Widget ───────────────────────────────────
 async function loadQuoteOfTheDay() {
     try {
-        const res = await fetch('https://corsproxy.io/?https://www.quoterism.com/api/quotes/quote-of-the-day', {
-            headers: { 'X-API-Key': 'qtr_8maQEWjR4ZYNgMrrkS7R8ElFvzHBb07g' }
-        });
+        const res = await fetch('https://indian-quotes-api.vercel.app/api/quotes/random');
         if (!res.ok) throw new Error('Failed to fetch quote');
         const data = await res.json();
         
@@ -628,7 +626,7 @@ async function loadQuoteOfTheDay() {
         const contentDiv = document.querySelector('.quote-content');
         contentDiv.style.display = 'block';
         
-        document.getElementById('quoteText').textContent = `"${data.text}"`;
+        document.getElementById('quoteText').textContent = `"${data.quote}"`;
         document.getElementById('quoteAuthor').textContent = `— ${data.author?.name || 'Unknown'}`;
         
     } catch (e) {
