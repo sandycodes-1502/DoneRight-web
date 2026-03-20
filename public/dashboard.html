@@ -7,46 +7,13 @@
     <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/globals.css">
-    <link rel="stylesheet" href="/css/nav.css">
-    <link rel="stylesheet" href="/css/auth.css">
-    <style>
-        .dashboard-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-            min-height: calc(100vh - 80px); /* Assuming nav is ~80px */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-        }
-        .dashboard-container h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-color);
-        }
-        .dashboard-container p {
-            color: var(--text-color-light);
-            margin-bottom: 2rem;
-            font-size: 1.1rem;
-        }
-        .dashboard-content {
-            background: var(--card-bg);
-            padding: 3rem;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-md);
-            width: 100%;
-            max-width: 600px;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/dashboard.css">
 </head>
 <body>
-    <!-- Main Header / Navigation -->
-    <header class="main-nav">
-        <div class="nav-container">
-            <a href="/" class="logo">
+    <div class="dashboard-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="dashboard-sidebar">
+            <a href="/" class="sidebar-logo">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="square" stroke-linejoin="miter">
                     <polyline points="4 14 8 18 14 8"></polyline>
                     <line x1="16" y1="8" x2="22" y2="8"></line>
@@ -55,20 +22,204 @@
                 </svg>
                 <span>DoneRight</span>
             </a>
-            <div class="nav-actions">
-                <button id="logoutBtn" class="btn secondary-btn btn-sm">Log out</button>
+            
+            <button class="sidebar-add-btn btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                Add New Task
+            </button>
+            
+            <ul class="sidebar-nav">
+                <li><a href="#" class="sidebar-item active">
+                    <div class="sidebar-item-content">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                        Dashboard
+                    </div>
+                </a></li>
+                <li><a href="#" class="sidebar-item">
+                    <div class="sidebar-item-content">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"></polyline><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"></path></svg>
+                        Inbox
+                    </div>
+                    <span class="sidebar-badge">12</span>
+                </a></li>
+                <li><a href="#" class="sidebar-item">
+                    <div class="sidebar-item-content">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        Today
+                    </div>
+                    <span class="sidebar-badge">5</span>
+                </a></li>
+                <li><a href="#" class="sidebar-item">
+                    <div class="sidebar-item-content">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        Upcoming
+                    </div>
+                </a></li>
+                <li><a href="#" class="sidebar-item">
+                    <div class="sidebar-item-content">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        Completed
+                    </div>
+                </a></li>
+            </ul>
+        </aside>
+        
+        <!-- Main Dashboard Content -->
+        <main class="dashboard-main">
+            <!-- Header Section -->
+            <header class="dashboard-header">
+                <div class="dashboard-greeting">
+                    <h1 id="welcomeMessage">Loading Dashboard...</h1>
+                    <p id="currentDate">Loading date...</p>
+                </div>
+                <div class="dashboard-actions">
+                    <input type="text" class="search-input" placeholder="Search tasks...">
+                    
+                    <button class="action-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+                    </button>
+                    
+                    <div class="profile-avatar" id="avatarDisplay" title="Profile">A</div>
+                    
+                    <button id="logoutBtn" class="action-icon" style="background: transparent; border: none;" title="Logout">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </button>
+                </div>
+            </header>
+            
+            <!-- Analytics Row -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>Total Tasks</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    </div>
+                    <span class="stat-value">24</span>
+                    <span class="stat-subtext"><span class="stat-trend positive">+3</span> this week</span>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>Completed</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    </div>
+                    <span class="stat-value">18</span>
+                    <span class="stat-subtext">75% done</span>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>In Progress</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <span class="stat-value">4</span>
+                    <span class="stat-subtext">On track</span>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <span>Productivity</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                    </div>
+                    <span class="stat-value">92%</span>
+                    <span class="stat-subtext"><span class="stat-trend positive">+8%</span> vs last week</span>
+                </div>
             </div>
-        </div>
-    </header>
+            
+            <!-- Centered Task List -->
+            <div class="tasks-area">
+                <div class="tasks-toolbar">
+                    <div class="tasks-title">
+                        <h2>Your Tasks</h2>
+                    </div>
+                    <div class="tasks-filters">
+                        <span class="active">All</span>
+                        <span>Active</span>
+                        <span>Completed</span>
+                        <span style="display:flex; align-items:center;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="tasks-list">
+                    <!-- Task 1 -->
+                    <div class="task-item">
+                        <div class="task-checkbox-container">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="task-content">
+                            <h3 class="task-name">Complete project proposal</h3>
+                            <p class="task-description">Draft the Q2 product roadmap and present to stakeholders</p>
+                            <div class="task-metadata">
+                                <span class="task-tag tag-work">Work</span>
+                                <span class="task-due">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    Today
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Task 2 -->
+                    <div class="task-item">
+                        <div class="task-checkbox-container">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="task-content">
+                            <h3 class="task-name">Schedule dentist appointment</h3>
+                            <p class="task-description">Annual checkup and cleaning</p>
+                            <div class="task-metadata">
+                                <span class="task-tag tag-health">Health</span>
+                                <span class="task-due">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    Tomorrow
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Task 3 -->
+                    <div class="task-item">
+                        <div class="task-checkbox-container">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="task-content">
+                            <h3 class="task-name">Review React documentation</h3>
+                            <p class="task-description">Study the new Server Components patterns</p>
+                            <div class="task-metadata">
+                                <span class="task-tag tag-learning">Learning</span>
+                                <span class="task-due">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    Mar 22
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
-    <main class="dashboard-container">
-        <div class="dashboard-content">
-            <h1 id="welcomeMessage">Loading Dashboard...</h1>
-            <p>Welcome to your personal productivity space.</p>
-            <p>We are still building the full dashboard experience. Stay tuned!</p>
-        </div>
-    </main>
+                    <!-- Task 4 (Completed) -->
+                    <div class="task-item completed">
+                        <div class="task-checkbox-container">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <div class="task-content">
+                            <h3 class="task-name">Buy groceries</h3>
+                            <p class="task-description">Vegetables, fruits, and snacks for the week</p>
+                            <div class="task-metadata">
+                                <span class="task-tag tag-personal">Personal</span>
+                                <span class="task-due">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                    Today
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
 
+    <!-- Scripts -->
     <script type="module" src="/js/auth.js"></script>
     <script type="module">
         import { setupAuthStateObserver } from '/js/auth.js';
@@ -76,11 +227,37 @@
         setupAuthStateObserver((user) => {
             // User is logged in
             const welcomeMessage = document.getElementById('welcomeMessage');
-            const displayName = user.displayName || 'Guest User';
-            welcomeMessage.textContent = `Welcome, ${displayName}!`;
+            const displayName = user.displayName || 'Guest';
+            
+            // Set dynamic greeting based on time of day
+            const hour = new Date().getHours();
+            let greeting = "Good evening";
+            if (hour < 12) greeting = "Good morning";
+            else if (hour < 18) greeting = "Good afternoon";
+            
+            welcomeMessage.textContent = `${greeting}, ${displayName}`;
+            
+            // Display Avatar Letter
+            const avatarDisplay = document.getElementById('avatarDisplay');
+            if (avatarDisplay) {
+                avatarDisplay.textContent = displayName.charAt(0).toUpperCase();
+            }
+
+            // Set current date
+            const dateOptions = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', dateOptions);
+            
         }, () => {
             // User is logged out, redirect to login
             window.location.href = '/login';
+        });
+
+        // Toggle task completion visual state (for demo purposes)
+        document.querySelectorAll('.task-item').forEach(item => {
+            const checkbox = item.querySelector('.task-checkbox-container');
+            checkbox.addEventListener('click', () => {
+                item.classList.toggle('completed');
+            });
         });
     </script>
     <script src="/js/cursor.js"></script>

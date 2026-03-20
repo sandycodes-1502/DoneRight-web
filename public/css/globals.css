@@ -1,12 +1,18 @@
 /* global css variables and resets */
 :root {
-    /* Color Palette */
-    --bg-color: #F7F5F2; /* Warm Off-White */
-    --surface-color: #FFFFFF; /* Pure White */
-    --text-primary: #1A1A1A; /* Soft Black */
-    --text-secondary: #6B6B6B; /* Muted Grey */
-    --accent-green: #3A7D44; /* Muted Forest Green */
-    --border-light: #E5E5E5; /* Light Grey Dividers */
+    /* Color Palette - Premium Dark */
+    --bg-color: #09090b; /* zinc-950 */
+    --surface-color: #18181b; /* zinc-900 */
+    --surface-hover: #27272a; /* zinc-800 */
+    --card-bg: #0c0c0e;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa; /* zinc-400 */
+    --accent-primary: #7c3aed; /* violet-600 */
+    --accent-hover: #6d28d9;
+    --border-light: #27272a;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #e11d48;
 
     /* Typography */
     --font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
@@ -23,6 +29,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
+    cursor: none !important;
 }
 
 html, body {
@@ -78,7 +85,7 @@ a {
     gap: 0.5rem;
     font-weight: 500;
     border-radius: var(--border-radius-sm);
-    cursor: pointer;
+    cursor: pointer !important;
     transition: all var(--transition-speed) ease;
     border: none;
     text-decoration: none;
@@ -97,18 +104,18 @@ a {
 
 .primary-btn {
     background-color: var(--text-primary);
-    color: var(--surface-color);
+    color: var(--bg-color);
     border: 1px solid var(--text-primary);
 }
 
 .primary-btn:hover {
-    background-color: var(--surface-color);
+    background-color: transparent;
     color: var(--text-primary);
     transform: translateY(-1px);
 }
 
 .secondary-btn {
-    background-color: var(--surface-color);
+    background-color: transparent;
     color: var(--text-primary);
     border: 1px solid var(--border-light);
 }
@@ -116,7 +123,6 @@ a {
 .secondary-btn:hover {
     background-color: var(--border-light);
     color: var(--text-primary);
-    border-color: var(--border-light);
     transform: translateY(-1px);
 }
 
@@ -128,27 +134,50 @@ svg.arrow-icon {
     transform: translateX(4px);
 }
 
-/* Custom Cursor CSS */
-body, a, button, .btn {
-    cursor: none;
+/* Custom Cursor Details */
+.cursor-dot {
+    position: fixed;
+    z-index: 9999;
+    width: 10px;
+    height: 10px;
+    background-color: #ffffff; /* White to contrast cleanly via mix-blend-mode */
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    mix-blend-mode: difference;
+    transition: width 0.15s ease-out, height 0.15s ease-out, transform 0.15s ease-out;
 }
 
-.custom-cursor {
+.cursor-dot.pointer {
     width: 16px;
     height: 16px;
-    background-color: var(--accent-green);
-    border-radius: 50%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%); /* Centered on mouse */
-    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
 }
 
-.custom-cursor.cursor-hover {
-    width: 60px;
-    height: 60px;
-    opacity: 0.15;
+.cursor-dot.clicking {
+    transform: translate(-50%, -50%) scale(0.75);
+}
+
+.cursor-ring {
+    position: fixed;
+    z-index: 9998;
+    width: 36px;
+    height: 36px;
+    border: 2px solid var(--text-primary);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    opacity: 0.6;
+    transition: opacity 0.2s ease, width 0.2s ease, height 0.2s ease, border-width 0.2s ease;
+}
+
+.cursor-ring.pointer {
+    width: 54px; /* 1.5x scale */
+    height: 54px;
+    opacity: 1;
+}
+
+.cursor-ring.clicking {
+    width: 27px; /* 0.75x scale */
+    height: 27px;
+    opacity: 1;
 }
