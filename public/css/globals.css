@@ -110,13 +110,13 @@ a {
 .secondary-btn {
     background-color: var(--surface-color);
     color: var(--text-primary);
-    border: 1px solid var(--surface-color);
+    border: 1px solid var(--border-light);
 }
 
 .secondary-btn:hover {
-    background-color: transparent;
-    color: var(--surface-color);
-    border-color: var(--surface-color);
+    background-color: var(--border-light);
+    color: var(--text-primary);
+    border-color: var(--border-light);
     transform: translateY(-1px);
 }
 
@@ -133,22 +133,43 @@ body, a, button, .btn {
     cursor: none;
 }
 
-.custom-cursor {
-    width: 16px;
-    height: 16px;
+.custom-cursor-dot {
+    width: 6px;
+    height: 6px;
     background-color: var(--accent-green);
     border-radius: 50%;
     position: fixed;
     top: 0;
     left: 0;
     pointer-events: none;
-    z-index: 9999;
-    transform: translate(-50%, -50%); /* Centered on mouse */
-    transition: width 0.25s cubic-bezier(0.16, 1, 0.3, 1), height 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
+    z-index: 10000;
+    transition: width 0.2s, height 0.2s, opacity 0.2s;
+    will-change: transform;
 }
 
-.custom-cursor.cursor-hover {
-    width: 60px;
-    height: 60px;
-    opacity: 0.15;
+.custom-cursor-circle {
+    width: 32px;
+    height: 32px;
+    border: 1px solid var(--accent-green);
+    border-radius: 50%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 9999;
+    transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), height 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, border-color 0.2s;
+    will-change: transform;
+}
+
+.custom-cursor-dot.cursor-hover {
+    width: 0px;
+    height: 0px;
+    opacity: 0;
+}
+
+.custom-cursor-circle.cursor-hover {
+    width: 50px;
+    height: 50px;
+    background-color: rgba(58, 125, 68, 0.15); /* matching accent-green */
+    border-color: transparent;
 }
