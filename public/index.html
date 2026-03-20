@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DoneRight - Get things done, the right way</title>
+    <meta name="description" content="Organize your daily responsibilities in a simple, structured, and motivating way.">
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Dependencies -->
+    <link rel="stylesheet" href="/css/globals.css">
+    <link rel="stylesheet" href="/css/nav.css">
+    <link rel="stylesheet" href="/css/hero.css">
+    <link rel="stylesheet" href="/css/features.css">
+    <link rel="stylesheet" href="/css/how-it-works.css">
+    <link rel="stylesheet" href="/css/cta-footer.css">
+</head>
+<body>
+    <!-- Main Header / Navigation -->
+    <header class="main-nav">
+        <div class="nav-container">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Checkmark icon for logo -->
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>DoneRight</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How it works</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <div class="nav-actions" id="navActions">
+                <a href="/login" class="login-btn" id="loginBtn">Log in</a>
+                <a href="/signup" class="btn primary-btn btn-sm" id="signupBtn">Get started</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-chip">
+                <span class="dot"></span> Simple task management for focused people
+            </div>
+            
+            <h1 class="hero-title">Get things done,<br>the right way</h1>
+            <p class="hero-subtitle">
+                Organize your daily responsibilities in a simple, structured, and motivating way.<br>
+                Capture tasks quickly, track your progress, and stay consistent with your goals.
+            </p>
+            
+            <a href="/signup" class="btn primary-btn lg-btn cta-hero">
+                Get started — It's free
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </a>
+
+            <!-- Dashboard Preview Mockup -->
+            <div class="dashboard-preview">
+                <div class="dash-header">
+                    <div>
+                        <p class="dash-date">Wednesday, March 19</p>
+                        <h2 class="dash-title">Today's Tasks</h2>
+                    </div>
+                    <div class="dash-stats">
+                        <span class="count-big">2/5</span>
+                        <span class="count-label">completed</span>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 40%;"></div>
+                </div>
+                <div class="task-list">
+                    <!-- Task 1 done -->
+                    <div class="task-item completed">
+                        <div class="task-checkbox checked">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <span class="task-text">Review project proposal</span>
+                        <span class="tag">Work</span>
+                    </div>
+                    <!-- Task 2 done -->
+                    <div class="task-item completed">
+                        <div class="task-checkbox checked">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                        </div>
+                        <span class="task-text">Morning workout routine</span>
+                        <span class="tag">Health</span>
+                    </div>
+                    <!-- Task 3 pending -->
+                    <div class="task-item">
+                        <div class="task-checkbox"></div>
+                        <span class="task-text">Prepare team presentation</span>
+                        <span class="tag">Work</span>
+                    </div>
+                    <!-- Task 4 pending -->
+                    <div class="task-item">
+                        <div class="task-checkbox"></div>
+                        <span class="task-text">Call with design team</span>
+                        <span class="tag">Work</span>
+                    </div>
+                    <!-- Task 5 pending -->
+                    <div class="task-item">
+                        <div class="task-checkbox"></div>
+                        <span class="task-text">Read 20 pages</span>
+                        <span class="tag">Personal</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="features" class="features-section">
+            <h2 class="section-title">Everything you need to stay productive</h2>
+            <p class="section-subtitle">Simple tools that help you build better habits and accomplish more every day.</p>
+            
+            <div class="features-grid">
+                <!-- Feature 1 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </div>
+                    <h3>Quick Capture</h3>
+                    <p>Add tasks in seconds with our streamlined input. Keyboard shortcuts and smart defaults mean less friction, more action.</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                    </div>
+                    <h3>Stay Focused</h3>
+                    <p>Prioritize what matters. Our clean interface removes distractions so you can concentrate on completing your tasks.</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </div>
+                    <h3>Track Progress</h3>
+                    <p>Visualize your productivity over time. See your streaks, completion rates, and patterns to stay motivated.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works Section -->
+        <section id="how-it-works" class="how-it-works-section">
+            <h2 class="section-title">How it works</h2>
+            <p class="section-subtitle">A simple three-step process to transform your productivity.</p>
+            
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-number">01</div>
+                    <div class="step-content">
+                        <h3>Capture your tasks</h3>
+                        <p>Quickly add everything on your mind. Don't worry about organizing yet — just get it all down.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">02</div>
+                    <div class="step-content">
+                        <h3>Organize & prioritize</h3>
+                        <p>Group related tasks, set priorities, and schedule what matters most for today.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <div class="step-number">03</div>
+                    <div class="step-content">
+                        <h3>Complete & reflect</h3>
+                        <p>Check off tasks as you go. Review your progress and celebrate your wins.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pre-footer CTA -->
+        <section class="cta-section">
+            <div class="cta-content">
+                <h2 class="cta-title">Ready to get things done?</h2>
+                <p class="cta-subtitle">Join thousands of people who have transformed their productivity<br>with DoneRight.</p>
+                <a href="/signup" class="btn secondary-btn lg-btn">
+                    Start for free
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+                        <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-container">
+            <div class="logo">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M8 12L11 15L16 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>DoneRight</span>
+            </div>
+            <div class="footer-links">
+                <a href="/privacy">Privacy</a>
+                <a href="/terms">Terms</a>
+                <a href="/contact">Contact</a>
+            </div>
+            <div class="footer-copyright">
+                © 2026 DoneRight. All rights reserved.
+            </div>
+        </div>
+    </footer>
+    <script type="module">
+        import { setupAuthStateObserver, logoutUser } from '/js/auth.js';
+        
+        setupAuthStateObserver((user) => {
+            const navActions = document.getElementById('navActions');
+            if (navActions) {
+                navActions.innerHTML = `
+                    <a href="/dashboard" class="login-btn" style="text-decoration: none;">Dashboard</a>
+                    <button id="logoutBtnNav" class="btn primary-btn btn-sm" style="border: none; cursor: pointer; font-family: inherit;">Log out</button>
+                `;
+                document.getElementById('logoutBtnNav').addEventListener('click', logoutUser);
+            }
+            
+            const ctaBtns = document.querySelectorAll('.cta-hero');
+            ctaBtns.forEach(btn => {
+                btn.href = '/dashboard';
+                btn.innerHTML = `Go to Dashboard
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`;
+            });
+        }, () => {
+            const navActions = document.getElementById('navActions');
+            if (navActions && navActions.innerHTML.includes('logoutBtnNav')) {
+                navActions.innerHTML = `
+                    <a href="/login" class="login-btn" id="loginBtn">Log in</a>
+                    <a href="/signup" class="btn primary-btn btn-sm" id="signupBtn">Get started</a>
+                `;
+            }
+            
+            const ctaBtns = document.querySelectorAll('.cta-hero');
+            ctaBtns.forEach(btn => {
+                btn.href = '/signup';
+                btn.innerHTML = `Get started — It's free
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="arrow-icon">
+                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 5L19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>`;
+            });
+        });
+    </script>
+    <script src="/js/cursor.js"></script>
+</body>
+</html>
