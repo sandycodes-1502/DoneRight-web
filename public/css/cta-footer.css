@@ -23,10 +23,20 @@
 }
 
 .cta-subtitle {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(15, 23, 42, 0.7); /* Dark text for the inverted light background */
     font-size: 1.125rem;
     line-height: 1.6;
     margin-bottom: 3rem;
+}
+
+.cta-section .secondary-btn {
+    border-color: var(--surface-color);
+    color: var(--surface-color);
+}
+
+.cta-section .secondary-btn:hover {
+    background-color: var(--surface-color);
+    color: var(--text-primary);
 }
 
 @media (min-width: 768px) {
