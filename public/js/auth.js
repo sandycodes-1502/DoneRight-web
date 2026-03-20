@@ -4,7 +4,7 @@ import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/fireb
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyC1mNUcJYtAZSi4r_UNgP_7hjU0ypggwMs",
+    apiKey: "AIzaSyC1mNUcJYtAZSi4r_UNgP_7hjUOypggwMs",
     authDomain: "doneright-2205.firebaseapp.com",
     projectId: "doneright-2205",
     storageBucket: "doneright-2205.firebasestorage.app",
