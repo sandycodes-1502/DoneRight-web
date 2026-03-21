@@ -1,386 +1,328 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - DoneRight</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/globals.css">
     <link rel="stylesheet" href="/css/dashboard.css">
 </head>
-
 <body>
-    <div class="dashboard-layout">
+<div class="dashboard-layout">
 
-        <!-- ── Sidebar ─────────────────────────────────────────────── -->
-        <aside class="dashboard-sidebar">
-            <a href="/" class="sidebar-logo">
-                <img src="/images/logo.svg" alt="DoneRight" width="32" height="32" style="border-radius:8px">
-                <span>DoneRight</span>
-            </a>
+    <!-- ── Sidebar ─────────────────────────────────────────────── -->
+    <aside class="dashboard-sidebar">
+        <a href="/" class="sidebar-logo">
+            <img src="/images/logo.svg" alt="DoneRight" width="32" height="32" style="border-radius:8px">
+            <span>DoneRight</span>
+        </a>
 
-            <button id="openModalBtn" class="sidebar-add-btn btn">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <line x1="12" y1="5" x2="12" y2="19"></line>
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                </svg>
-                Add New Task
-            </button>
+        <button id="openModalBtn" class="sidebar-add-btn btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            Add New Task
+        </button>
 
-            <ul class="sidebar-nav">
-                <li><a href="#" class="sidebar-item active" id="filterAll">
-                        <div class="sidebar-item-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <rect x="3" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="3" width="7" height="7"></rect>
-                                <rect x="14" y="14" width="7" height="7"></rect>
-                                <rect x="3" y="14" width="7" height="7"></rect>
-                            </svg>
-                            All Tasks
-                        </div>
-                    </a></li>
-                <li><a href="#" class="sidebar-item" id="filterTodo">
-                        <div class="sidebar-item-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="12" y1="8" x2="12" y2="12"></line>
-                                <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                            </svg>
-                            To Do
-                        </div>
-                        <span class="sidebar-badge" id="sidebarTodoCount">0</span>
-                    </a></li>
-                <li><a href="#" class="sidebar-item" id="filterInProgress">
-                        <div class="sidebar-item-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <polyline points="12 6 12 12 16 14"></polyline>
-                            </svg>
-                            In Progress
-                        </div>
-                        <span class="sidebar-badge" id="sidebarInProgressCount">0</span>
-                    </a></li>
-                <li><a href="#" class="sidebar-item" id="filterDone">
-                        <div class="sidebar-item-content">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2">
-                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                                <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                            </svg>
-                            Done
-                        </div>
-                        <span class="sidebar-badge" id="sidebarDoneCount">0</span>
-                    </a></li>
-            </ul>
-        </aside>
+        <ul class="sidebar-nav">
+            <li><a href="#" class="sidebar-item active" id="filterAll">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                    All Tasks
+                </div>
+            </a></li>
+            <li><a href="#" class="sidebar-item" id="filterTodo">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    To Do
+                </div>
+                <span class="sidebar-badge" id="sidebarTodoCount">0</span>
+            </a></li>
+            <li><a href="#" class="sidebar-item" id="filterInProgress">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    In Progress
+                </div>
+                <span class="sidebar-badge" id="sidebarInProgressCount">0</span>
+            </a></li>
+            <li><a href="#" class="sidebar-item" id="filterDone">
+                <div class="sidebar-item-content">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                    Done
+                </div>
+                <span class="sidebar-badge" id="sidebarDoneCount">0</span>
+            </a></li>
+        </ul>
+    </aside>
 
-        <!-- ── Main Content ──────────────────────────────────────── -->
-        <main class="dashboard-main">
+    <!-- ── Main Content ──────────────────────────────────────── -->
+    <main class="dashboard-main">
 
-            <!-- Header -->
-            <header class="dashboard-header">
-                <div class="dashboard-greeting">
-                    <h1 id="welcomeMessage">Loading...</h1>
-                    <p id="currentDate"></p>
-                    <span id="liveTime"
-                        style="font-size:0.8rem;opacity:0.45;letter-spacing:0.04em;font-variant-numeric:tabular-nums;"></span>
-                </div>
-                <div class="dashboard-actions">
-                    <input type="text" id="searchInput" class="search-input" placeholder="Search tasks...">
-                    <div class="profile-avatar" id="avatarDisplay" title="Profile">?</div>
-                    <button id="logoutBtn" class="action-icon" style="background:transparent;border:none;"
-                        title="Logout">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                            <polyline points="16 17 21 12 16 7"></polyline>
-                            <line x1="21" y1="12" x2="9" y2="12"></line>
-                        </svg>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Stats Row -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>Total Tasks</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <rect x="3" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="3" width="7" height="7"></rect>
-                            <rect x="14" y="14" width="7" height="7"></rect>
-                            <rect x="3" y="14" width="7" height="7"></rect>
-                        </svg>
-                    </div>
-                    <span class="stat-value" id="statTotal">—</span>
-                    <span class="stat-subtext">tasks in your list</span>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>To Do</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="12" y1="8" x2="12" y2="12"></line>
-                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                        </svg>
-                    </div>
-                    <span class="stat-value" id="statTodo" style="color:#60a5fa">—</span>
-                    <span class="stat-subtext">not started yet</span>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>In Progress</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <polyline points="12 6 12 12 16 14"></polyline>
-                        </svg>
-                    </div>
-                    <span class="stat-value" id="statInProgress" style="color:#fb923c">—</span>
-                    <span class="stat-subtext">being worked on</span>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-header">
-                        <span>Done</span>
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                            <polyline points="22 4 12 14.01 9 11.01"></polyline>
-                        </svg>
-                    </div>
-                    <span class="stat-value" id="statDone" style="color:#34d399">—</span>
-                    <span class="stat-subtext" id="statDonePercent">completed</span>
-                </div>
+        <!-- Header -->
+        <header class="dashboard-header">
+            <div class="dashboard-greeting">
+                <h1 id="welcomeMessage">Loading...</h1>
+                <p id="currentDate"></p>
+                <span id="liveTime" style="font-size:0.8rem;opacity:0.45;letter-spacing:0.04em;font-variant-numeric:tabular-nums;"></span>
             </div>
-
-            <!-- Task List (live from Firestore) -->
-            <div class="tasks-area">
-                <div class="tasks-toolbar">
-                    <div class="tasks-title">
-                        <h2>Your Tasks</h2>
-                    </div>
-                    <div class="tasks-filters">
-                        <span class="active" data-filter="ALL">All</span>
-                        <span data-filter="TODO">To Do</span>
-                        <span data-filter="IN_PROGRESS">In Progress</span>
-                        <span data-filter="DONE">Done</span>
-                    </div>
-                </div>
-
-                <div class="tasks-content-wrapper" style="display: flex; gap: 2rem; align-items: flex-start;">
-                    <div id="tasksList" style="flex: 1; min-width: 0;">
-                        <div class="tasks-loading">
-                            <div class="spinner"></div>
-                            Loading your tasks...
-                        </div>
-                    </div>
-
-                    <div class="dashboard-widget-col" style="width: 300px; flex-shrink: 0;">
-                        <div class="quote-widget" id="quoteWidget">
-                            <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                            </svg>
-                            <div class="quote-loading">
-                                <div class="spinner"
-                                    style="width:20px;height:20px;border-width:2px;border-top-color:var(--accent-primary);">
-                                </div>
-                            </div>
-                            <div class="quote-content" style="display:none;">
-                                <p class="quote-text" id="quoteText">Loading...</p>
-                                <p class="quote-author" id="quoteAuthor">Unknown</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-    </div>
-
-    <!-- ── Add Task Modal ───────────────────────────────────────── -->
-    <div class="modal-backdrop" id="addTaskModal">
-        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-            <div class="modal-header">
-                <h2 id="modalTitle">New Task</h2>
-                <button class="modal-close" id="closeModalBtn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
+            <div class="dashboard-actions">
+                <input type="text" id="searchInput" class="search-input" placeholder="Search tasks...">
+                <div class="profile-avatar" id="avatarDisplay" title="Profile">?</div>
+                <button id="logoutBtn" class="action-icon" style="background:transparent;border:none;" title="Logout">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
                 </button>
             </div>
-            <div class="form-group">
-                <label for="taskTitle">Title *</label>
-                <input class="form-input" id="taskTitle" type="text" placeholder="What needs to be done?"
-                    maxlength="120" autocomplete="off">
+        </header>
+
+        <!-- Stats Row -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Total Tasks</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </div>
+                <span class="stat-value" id="statTotal">—</span>
+                <span class="stat-subtext">tasks in your list</span>
             </div>
-            <div class="form-group">
-                <label for="taskDescription">Description</label>
-                <textarea class="form-textarea" id="taskDescription" placeholder="Optional details..."
-                    maxlength="500"></textarea>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>To Do</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                </div>
+                <span class="stat-value" id="statTodo" style="color:#60a5fa">—</span>
+                <span class="stat-subtext">not started yet</span>
             </div>
-            <div class="form-group">
-                <label for="taskStatus">Initial Status</label>
-                <select class="form-select" id="taskStatus">
-                    <option value="TODO">To Do</option>
-                    <option value="IN_PROGRESS">In Progress</option>
-                    <option value="DONE">Done</option>
-                </select>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>In Progress</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                </div>
+                <span class="stat-value" id="statInProgress" style="color:#fb923c">—</span>
+                <span class="stat-subtext">being worked on</span>
             </div>
-            <div class="modal-actions">
-                <button class="btn-cancel" id="cancelModalBtn">Cancel</button>
-                <button class="btn-create" id="createTaskBtn">Create Task</button>
+            <div class="stat-card">
+                <div class="stat-header">
+                    <span>Done</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                </div>
+                <span class="stat-value" id="statDone" style="color:#34d399">—</span>
+                <span class="stat-subtext" id="statDonePercent">completed</span>
             </div>
         </div>
+
+        <!-- Task List (live from Firestore) -->
+        <div class="tasks-area">
+            <div class="tasks-toolbar">
+                <div class="tasks-title"><h2>Your Tasks</h2></div>
+                <div class="tasks-filters">
+                    <span class="active" data-filter="ALL">All</span>
+                    <span data-filter="TODO">To Do</span>
+                    <span data-filter="IN_PROGRESS">In Progress</span>
+                    <span data-filter="DONE">Done</span>
+                </div>
+            </div>
+            
+            <div class="tasks-content-wrapper" style="display: flex; gap: 2rem; align-items: flex-start;">
+                <div id="tasksList" style="flex: 1; min-width: 0;">
+                    <div class="tasks-loading">
+                        <div class="spinner"></div>
+                        Loading your tasks...
+                    </div>
+                </div>
+                
+                <div class="dashboard-widget-col" style="width: 300px; flex-shrink: 0;">
+                    <div class="quote-widget" id="quoteWidget">
+                        <svg class="quote-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                        </svg>
+                        <div class="quote-loading">
+                            <div class="spinner" style="width:20px;height:20px;border-width:2px;border-top-color:var(--accent-primary);"></div>
+                        </div>
+                        <div class="quote-content" style="display:none;">
+                            <p class="quote-text" id="quoteText">Loading...</p>
+                            <p class="quote-author" id="quoteAuthor">Unknown</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<!-- ── Add Task Modal ───────────────────────────────────────── -->
+<div class="modal-backdrop" id="addTaskModal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-header">
+            <h2 id="modalTitle">New Task</h2>
+            <button class="modal-close" id="closeModalBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+        <div class="form-group">
+            <label for="taskTitle">Title *</label>
+            <input class="form-input" id="taskTitle" type="text" placeholder="What needs to be done?" maxlength="120" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="taskDescription">Description</label>
+            <textarea class="form-textarea" id="taskDescription" placeholder="Optional details..." maxlength="500"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="taskStatus">Initial Status</label>
+            <select class="form-select" id="taskStatus">
+                <option value="TODO">To Do</option>
+                <option value="IN_PROGRESS">In Progress</option>
+                <option value="DONE">Done</option>
+            </select>
+        </div>
+        <div class="modal-actions">
+            <button class="btn-cancel" id="cancelModalBtn">Cancel</button>
+            <button class="btn-create" id="createTaskBtn">Create Task</button>
+        </div>
     </div>
+</div>
 
 
-    <script type="module">
-        import { setupAuthStateObserver, logoutUser } from '/js/auth.js';
-        import { createTask, loadTasks, updateTaskStatus, updateTask, deleteTask, nextStatus } from '/js/tasks.js';
+<script type="module">
+import { setupAuthStateObserver, logoutUser } from '/js/auth.js';
+import { createTask, loadTasks, updateTaskStatus, updateTask, deleteTask, nextStatus } from '/js/tasks.js';
 
-        // ── State ─────────────────────────────────────────────────────
-        let currentUser = null;
-        let allTasks = [];
-        let activeFilter = 'ALL';
-        let unsubscribeTasks = null;
-        let recentlyChangedIds = new Set();
-        let prevStatusMap = {};
-        let pendingDeleteId = null;
-        let editingTaskId = null;        // ID of task being inline-edited
-        let prevStats = { total: null, todo: null, inProgress: null, done: null };
+// ── State ─────────────────────────────────────────────────────
+let currentUser = null;
+let allTasks = [];
+let activeFilter = 'ALL';
+let unsubscribeTasks = null;
+let recentlyChangedIds = new Set();
+let prevStatusMap = {};
+let pendingDeleteId = null;
+let editingTaskId = null;        // ID of task being inline-edited
+let prevStats = { total: null, todo: null, inProgress: null, done: null };
 
-        // ── Helpers ───────────────────────────────────────────────────
-        function escapeHtml(str) {
-            return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        }
-        function formatDate(ts) {
-            if (!ts) return '';
-            return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-        }
-        const STATUS_LABEL = { TODO: 'To Do', IN_PROGRESS: 'In Progress', DONE: 'Done' };
-        const STATUS_CLASS = { TODO: 'todo', IN_PROGRESS: 'in-progress', DONE: 'done' };
-        const NEXT_LABEL = { TODO: 'Start →', IN_PROGRESS: 'Done ✓', DONE: 'Reopen' };
-        const STATUS_ORDER = { TODO: 0, IN_PROGRESS: 1, DONE: 2 };
+// ── Helpers ───────────────────────────────────────────────────
+function escapeHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function formatDate(ts) {
+    if (!ts) return '';
+    return new Date(ts).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+const STATUS_LABEL = { TODO: 'To Do', IN_PROGRESS: 'In Progress', DONE: 'Done' };
+const STATUS_CLASS = { TODO: 'todo', IN_PROGRESS: 'in-progress', DONE: 'done' };
+const NEXT_LABEL   = { TODO: 'Start →', IN_PROGRESS: 'Done ✓', DONE: 'Reopen' };
+const STATUS_ORDER = { TODO: 0, IN_PROGRESS: 1, DONE: 2 };
 
-        // ── Sort: TODO first, IN_PROGRESS second, DONE last ──────────
-        function sortTasks(tasks) {
-            return [...tasks].sort((a, b) => {
-                const diff = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
-                if (diff !== 0) return diff;
-                return (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt); // within same group, most recently touched first
-            });
-        }
+// ── Sort: TODO first, IN_PROGRESS second, DONE last ──────────
+function sortTasks(tasks) {
+    return [...tasks].sort((a, b) => {
+        const diff = STATUS_ORDER[a.status] - STATUS_ORDER[b.status];
+        if (diff !== 0) return diff;
+        return (b.updatedAt || b.createdAt) - (a.updatedAt || a.createdAt); // within same group, most recently touched first
+    });
+}
 
-        // ── Slide counter (odometer-style) ────────────────────────────
-        // Numbers slide UP when value increases, DOWN when value decreases.
-        function animateCounter(el, from, to) {
-            if (to === undefined || to === null) return;
-            if (from === to || from === null) { el.textContent = to; return; }
+// ── Animated stat counter ─────────────────────────────────────
+// ── Flip-clock digit animation ───────────────────────────────
+// Creates the premium mechanical flip effect: the element does a
+// brief 3D Y-rotation, showing the new value on the flip-back.
+// ── Slide counter (odometer-style) ────────────────────────────
+// Numbers slide UP when value increases, DOWN when value decreases.
+function animateCounter(el, from, to) {
+    if (to === undefined || to === null) return;
+    if (from === to || from === null) { el.textContent = to; return; }
 
-            const goingUp = to > from;
-            const dur = 200; // ms
+    const goingUp = to > from;
+    const dur = 200; // ms
 
-            // Wrap in a clipping div on first use
-            if (!el.classList.contains('slide-digit')) {
-                el.classList.add('slide-digit');
-                el.style.display = 'inline-block';
-                el.style.overflow = 'hidden';
-                el.style.verticalAlign = 'middle';
-            }
+    // Wrap in a clipping div on first use
+    if (!el.classList.contains('slide-digit')) {
+        el.classList.add('slide-digit');
+        el.style.display = 'inline-block';
+        el.style.overflow = 'hidden';
+        el.style.verticalAlign = 'middle';
+    }
 
-            // Position incoming value offscreen in the opposite direction
-            const startY = goingUp ? '120%' : '-120%';  // slides in from below if up, from above if down
-            const exitY = goingUp ? '-120%' : '120%';  // old value exits to opposite side
+    // Position incoming value offscreen in the opposite direction
+    const startY = goingUp ? '120%' : '-120%';  // slides in from below if up, from above if down
+    const exitY  = goingUp ? '-120%' : '120%';  // old value exits to opposite side
 
-            // Create the incoming span
-            const next = document.createElement('span');
-            next.textContent = to;
-            next.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(${startY});`;
+    // Create the incoming span
+    const next = document.createElement('span');
+    next.textContent = to;
+    next.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(${startY});`;
 
-            // Wrap the current text in a span if not yet wrapped
-            let current = el.querySelector('.slide-current');
-            if (!current) {
-                current = document.createElement('span');
-                current.className = 'slide-current';
-                current.textContent = el.textContent || from;
-                el.textContent = '';
-                el.style.position = 'relative';
-                el.style.lineHeight = 'inherit';
-                // Match the outer element's height to clip properly
-                el.style.height = '1.2em';
-                el.appendChild(current);
-            }
-            current.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(0);`;
+    // Wrap the current text in a span if not yet wrapped
+    let current = el.querySelector('.slide-current');
+    if (!current) {
+        current = document.createElement('span');
+        current.className = 'slide-current';
+        current.textContent = el.textContent || from;
+        el.textContent = '';
+        el.style.position = 'relative';
+        el.style.lineHeight = 'inherit';
+        // Match the outer element's height to clip properly
+        el.style.height = '1.2em';
+        el.appendChild(current);
+    }
+    current.style.cssText = `position:absolute;left:0;right:0;text-align:inherit;transform:translateY(0);`;
 
-            next.className = 'slide-next';
-            el.appendChild(next);
+    next.className = 'slide-next';
+    el.appendChild(next);
 
-            // Trigger animation on next frame
-            requestAnimationFrame(() => {
-                const transition = `transform ${dur}ms cubic-bezier(0.4, 0, 0.2, 1)`;
-                current.style.transition = transition;
-                next.style.transition = transition;
-                current.style.transform = `translateY(${exitY})`;
-                next.style.transform = 'translateY(0)';
+    // Trigger animation on next frame
+    requestAnimationFrame(() => {
+        const transition = `transform ${dur}ms cubic-bezier(0.4, 0, 0.2, 1)`;
+        current.style.transition = transition;
+        next.style.transition = transition;
+        current.style.transform = `translateY(${exitY})`;
+        next.style.transform = 'translateY(0)';
 
-                setTimeout(() => {
-                    // Promote next to current, clean up
-                    current.remove();
-                    next.className = 'slide-current';
-                    next.style.transition = '';
-                }, dur + 20);
-            });
-        }
+        setTimeout(() => {
+            // Promote next to current, clean up
+            current.remove();
+            next.className = 'slide-current';
+            next.style.transition = '';
+        }, dur + 20);
+    });
+}
 
-        // ── Update Stats ──────────────────────────────────────────────
-        function updateStats(tasks) {
-            const total = tasks.length;
-            const todo = tasks.filter(t => t.status === 'TODO').length;
-            const ip = tasks.filter(t => t.status === 'IN_PROGRESS').length;
-            const done = tasks.filter(t => t.status === 'DONE').length;
-            const pct = total > 0 ? Math.round((done / total) * 100) : 0;
+// ── Update Stats ──────────────────────────────────────────────
+function updateStats(tasks) {
+    const total = tasks.length;
+    const todo  = tasks.filter(t => t.status === 'TODO').length;
+    const ip    = tasks.filter(t => t.status === 'IN_PROGRESS').length;
+    const done  = tasks.filter(t => t.status === 'DONE').length;
+    const pct   = total > 0 ? Math.round((done / total) * 100) : 0;
 
-            animateCounter(document.getElementById('statTotal'), prevStats.total, total);
-            animateCounter(document.getElementById('statTodo'), prevStats.todo, todo);
-            animateCounter(document.getElementById('statInProgress'), prevStats.inProgress, ip);
-            animateCounter(document.getElementById('statDone'), prevStats.done, done);
-            document.getElementById('statDonePercent').textContent = `${pct}% complete`;
-            prevStats = { total, todo, inProgress: ip, done };
+    animateCounter(document.getElementById('statTotal'),      prevStats.total,      total);
+    animateCounter(document.getElementById('statTodo'),       prevStats.todo,       todo);
+    animateCounter(document.getElementById('statInProgress'), prevStats.inProgress, ip);
+    animateCounter(document.getElementById('statDone'),       prevStats.done,       done);
+    document.getElementById('statDonePercent').textContent = `${pct}% complete`;
+    prevStats = { total, todo, inProgress: ip, done };
 
-            document.getElementById('sidebarTodoCount').textContent = todo;
-            document.getElementById('sidebarInProgressCount').textContent = ip;
-            document.getElementById('sidebarDoneCount').textContent = done;
-        }
+    document.getElementById('sidebarTodoCount').textContent = todo;
+    document.getElementById('sidebarInProgressCount').textContent = ip;
+    document.getElementById('sidebarDoneCount').textContent = done;
+}
 
-        // ── DOM-diff helper: build HTML for a single task ─────────────
-        function buildTaskHtml(task) {
-            const sc = STATUS_CLASS[task.status] || '';
-            const isConfirming = pendingDeleteId === task.id;
-            const isEditing = editingTaskId === task.id;
-            const isChanged = recentlyChangedIds.has(task.id);
+// ── DOM-diff helper: build HTML for a single task ─────────────
+function buildTaskHtml(task) {
+    const sc = STATUS_CLASS[task.status] || '';
+    const isConfirming = pendingDeleteId === task.id;
+    const isEditing = editingTaskId === task.id;
+    const isChanged = recentlyChangedIds.has(task.id);
 
-            const deleteRow = isConfirming
-                ? `<div class="delete-confirm-row">
+    const deleteRow = isConfirming
+        ? `<div class="delete-confirm-row">
              Delete this task?
              <button class="btn-delete-confirm" data-confirm-delete="${task.id}">Yes, delete</button>
              <button class="btn-delete-cancel" data-cancel-delete="${task.id}">Cancel</button>
            </div>`
-                : '';
+        : '';
 
-            const editRow = isEditing
-                ? `<div class="task-edit-row">
+    const editRow = isEditing
+        ? `<div class="task-edit-row">
              <input class="form-input task-edit-title" type="text" value="${escapeHtml(task.title)}" maxlength="120" placeholder="Task title">
              <textarea class="form-textarea task-edit-desc" rows="2" maxlength="500" placeholder="Description (optional)">${escapeHtml(task.description || '')}</textarea>
              <div class="task-edit-actions">
@@ -388,16 +330,15 @@
                <button class="btn-cancel" data-cancel-edit="${task.id}" style="padding:0.4rem 0.85rem;font-size:0.8rem">Cancel</button>
              </div>
            </div>`
-                : '';
+        : '';
 
-            // Serialise the "key" — only what affects the rendered card visually
-            // Editing / confirming states are always included so toggling re-renders the card
-            const key = [task.title, task.description || '', task.status,
-            task.updatedAt || task.createdAt,
-                isConfirming, isEditing, isChanged].join('|');
+    // Serialise the "key" — only what affects the rendered card visually
+    // Editing / confirming states are always included so toggling re-renders the card
+    const key = [task.title, task.description || '', task.status,
+                 task.updatedAt || task.createdAt,
+                 isConfirming, isEditing, isChanged].join('|');
 
-            return {
-                sc, isChanged, key, html: `
+    return { sc, isChanged, key, html: `
     <div class="task-item ${sc}${isConfirming ? ' confirm-delete' : ''}${isChanged ? ' status-changed' : ''}" data-id="${task.id}" data-key="${escapeHtml(key)}">
         <div class="task-content">
             <h3 class="task-name">${escapeHtml(task.title)}</h3>
@@ -428,80 +369,80 @@
             </button>
         </div>
     </div>` };
+}
+
+// ── DOM diff: patch only what changed (like DiffUtil) ─────────
+function patchTaskList(container, filteredTasks) {
+    const existing = new Map();
+    container.querySelectorAll('.task-item[data-id]').forEach(el => {
+        existing.set(el.dataset.id, el);
+    });
+
+    const ordered = [];
+    filteredTasks.forEach(task => {
+        const { key, html, isChanged } = buildTaskHtml(task);
+        let el = existing.get(task.id);
+
+        if (!el) {
+            // New task — create and animate in
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            el = wrapper.firstChild;
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(8px)';
+            container.appendChild(el);
+            requestAnimationFrame(() => {
+                el.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            });
+        } else if (el.dataset.key !== key) {
+            // Card data changed — patch innerHTML only
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html.trim();
+            const newEl = wrapper.firstChild;
+            el.className = newEl.className;
+            el.dataset.key = key;
+            el.innerHTML = newEl.innerHTML;
+            // Trigger status-change flash if needed
+            if (isChanged) {
+                el.classList.add('status-changed');
+                el.addEventListener('animationend', () => el.classList.remove('status-changed'), { once: true });
+            }
         }
+        existing.delete(task.id); // mark as kept
+        ordered.push(el);
+    });
 
-        // ── DOM diff: patch only what changed (like DiffUtil) ─────────
-        function patchTaskList(container, filteredTasks) {
-            const existing = new Map();
-            container.querySelectorAll('.task-item[data-id]').forEach(el => {
-                existing.set(el.dataset.id, el);
-            });
+    // Remove stale cards (deleted tasks) with fade-out
+    existing.forEach(el => {
+        el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(-6px)';
+        setTimeout(() => el.remove(), 200);
+    });
 
-            const ordered = [];
-            filteredTasks.forEach(task => {
-                const { key, html, isChanged } = buildTaskHtml(task);
-                let el = existing.get(task.id);
+    // Re-order DOM to match sorted order (without removing/re-adding)
+    ordered.forEach((el, i) => {
+        if (container.children[i] !== el) container.insertBefore(el, container.children[i] || null);
+    });
+}
 
-                if (!el) {
-                    // New task — create and animate in
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = html.trim();
-                    el = wrapper.firstChild;
-                    el.style.opacity = '0';
-                    el.style.transform = 'translateY(8px)';
-                    container.appendChild(el);
-                    requestAnimationFrame(() => {
-                        el.style.transition = 'opacity 0.25s ease, transform 0.25s ease';
-                        el.style.opacity = '1';
-                        el.style.transform = 'translateY(0)';
-                    });
-                } else if (el.dataset.key !== key) {
-                    // Card data changed — patch innerHTML only
-                    const wrapper = document.createElement('div');
-                    wrapper.innerHTML = html.trim();
-                    const newEl = wrapper.firstChild;
-                    el.className = newEl.className;
-                    el.dataset.key = key;
-                    el.innerHTML = newEl.innerHTML;
-                    // Trigger status-change flash if needed
-                    if (isChanged) {
-                        el.classList.add('status-changed');
-                        el.addEventListener('animationend', () => el.classList.remove('status-changed'), { once: true });
-                    }
-                }
-                existing.delete(task.id); // mark as kept
-                ordered.push(el);
-            });
+// ── Render Tasks ──────────────────────────────────────────────
+function renderTasks(tasks) {
+    const container = document.getElementById('tasksList');
+    const search = document.getElementById('searchInput').value.toLowerCase().trim();
 
-            // Remove stale cards (deleted tasks) with fade-out
-            existing.forEach(el => {
-                el.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
-                el.style.opacity = '0';
-                el.style.transform = 'translateY(-6px)';
-                setTimeout(() => el.remove(), 200);
-            });
+    const filtered = sortTasks(tasks.filter(t => {
+        const matchFilter = activeFilter === 'ALL' || t.status === activeFilter;
+        const matchSearch = !search ||
+            t.title.toLowerCase().includes(search) ||
+            (t.description && t.description.toLowerCase().includes(search));
+        return matchFilter && matchSearch;
+    }));
 
-            // Re-order DOM to match sorted order (without removing/re-adding)
-            ordered.forEach((el, i) => {
-                if (container.children[i] !== el) container.insertBefore(el, container.children[i] || null);
-            });
-        }
-
-        // ── Render Tasks ──────────────────────────────────────────────
-        function renderTasks(tasks) {
-            const container = document.getElementById('tasksList');
-            const search = document.getElementById('searchInput').value.toLowerCase().trim();
-
-            const filtered = sortTasks(tasks.filter(t => {
-                const matchFilter = activeFilter === 'ALL' || t.status === activeFilter;
-                const matchSearch = !search ||
-                    t.title.toLowerCase().includes(search) ||
-                    (t.description && t.description.toLowerCase().includes(search));
-                return matchFilter && matchSearch;
-            }));
-
-            if (filtered.length === 0) {
-                container.innerHTML = `
+    if (filtered.length === 0) {
+        container.innerHTML = `
             <div class="tasks-empty">
                 <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="display:block;margin:0 auto 1rem">
                     <path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
@@ -509,241 +450,237 @@
                 <p>${tasks.length === 0 ? 'No tasks yet. Add your first one!' : 'No tasks match this filter.'}</p>
                 ${tasks.length === 0 ? '<button class="btn-create" id="emptyAddBtn" style="margin:0 auto;display:block;">+ Add Task</button>' : ''}
             </div>`;
-                document.getElementById('emptyAddBtn')?.addEventListener('click', openModal);
-                return;
-            }
+        document.getElementById('emptyAddBtn')?.addEventListener('click', openModal);
+        return;
+    }
 
-            // Use DOM diff — only touch what changed
-            // Make sure to clear loading or empty states first since patchTaskList only manages task cards
-            container.querySelector('.tasks-loading')?.remove();
-            container.querySelector('.tasks-empty')?.remove();
+    // Use DOM diff — only touch what changed
+    // Make sure to clear loading or empty states first since patchTaskList only manages task cards
+    container.querySelector('.tasks-loading')?.remove();
+    container.querySelector('.tasks-empty')?.remove();
+    
+    patchTaskList(container, filtered);
+    recentlyChangedIds.clear();
 
-            patchTaskList(container, filtered);
-            recentlyChangedIds.clear();
 
+    // ── Next status button only (no badge click) ──────────────
+    container.querySelectorAll('[data-next]').forEach(btn => {
+        btn.addEventListener('click', () => advanceStatus(btn.dataset.next));
+    });
 
-            // ── Next status button only (no badge click) ──────────────
-            container.querySelectorAll('[data-next]').forEach(btn => {
-                btn.addEventListener('click', () => advanceStatus(btn.dataset.next));
-            });
+    // ── Edit button ───────────────────────────────────────────
+    container.querySelectorAll('[data-edit]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            editingTaskId = btn.dataset.edit === editingTaskId ? null : btn.dataset.edit;
+            pendingDeleteId = null;
+            renderTasks(allTasks);
+        });
+    });
 
-            // ── Edit button ───────────────────────────────────────────
-            container.querySelectorAll('[data-edit]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    editingTaskId = btn.dataset.edit === editingTaskId ? null : btn.dataset.edit;
-                    pendingDeleteId = null;
-                    renderTasks(allTasks);
-                });
-            });
-
-            // ── Save edit ─────────────────────────────────────────────
-            container.querySelectorAll('[data-save-edit]').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const id = btn.dataset.saveEdit;
-                    const card = btn.closest('.task-item');
-                    const title = card.querySelector('.task-edit-title')?.value.trim();
-                    const description = card.querySelector('.task-edit-desc')?.value.trim();
-                    if (!title) { card.querySelector('.task-edit-title')?.focus(); return; }
-                    btn.textContent = 'Saving...';
-                    btn.disabled = true;
-                    try {
-                        await updateTask(currentUser.uid, id, { title, description });
-                        editingTaskId = null;
-                        // onSnapshot re-renders automatically
-                    } catch (e) {
-                        console.error('Edit save failed:', e);
-                        btn.textContent = 'Save';
-                        btn.disabled = false;
-                    }
-                });
-            });
-
-            // ── Cancel edit ───────────────────────────────────────────
-            container.querySelectorAll('[data-cancel-edit]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    editingTaskId = null;
-                    renderTasks(allTasks);
-                });
-            });
-
-            // ── Delete: first click = inline confirm ──────────────────
-            container.querySelectorAll('[data-delete]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const id = btn.dataset.delete;
-                    if (pendingDeleteId === id) return;
-                    pendingDeleteId = id;
-                    editingTaskId = null;
-                    renderTasks(allTasks);
-                });
-            });
-
-            container.querySelectorAll('[data-confirm-delete]').forEach(btn => {
-                btn.addEventListener('click', async () => {
-                    const id = btn.dataset.confirmDelete;
-                    btn.textContent = 'Deleting...'; btn.disabled = true;
-                    try {
-                        await deleteTask(currentUser.uid, id);
-                        pendingDeleteId = null;
-                    } catch (e) {
-                        console.error('Delete failed:', e);
-                        pendingDeleteId = null;
-                        renderTasks(allTasks);
-                    }
-                });
-            });
-
-            container.querySelectorAll('[data-cancel-delete]').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    pendingDeleteId = null;
-                    renderTasks(allTasks);
-                });
-            });
-        }
-
-        // ── Advance status with flash animation ───────────────────────
-        async function advanceStatus(taskId) {
-            const task = allTasks.find(t => t.id === taskId);
-            if (!task || !currentUser) return;
-            recentlyChangedIds.add(taskId);
+    // ── Save edit ─────────────────────────────────────────────
+    container.querySelectorAll('[data-save-edit]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.saveEdit;
+            const card = btn.closest('.task-item');
+            const title = card.querySelector('.task-edit-title')?.value.trim();
+            const description = card.querySelector('.task-edit-desc')?.value.trim();
+            if (!title) { card.querySelector('.task-edit-title')?.focus(); return; }
+            btn.textContent = 'Saving...';
+            btn.disabled = true;
             try {
-                await updateTaskStatus(currentUser.uid, taskId, nextStatus(task.status));
-            } catch (e) {
-                console.error('Status update failed:', e);
-                recentlyChangedIds.delete(taskId);
-            }
-        }
-
-        // ── Modal ─────────────────────────────────────────────────────
-        function openModal() {
-            document.getElementById('addTaskModal').classList.add('open');
-            setTimeout(() => document.getElementById('taskTitle').focus(), 50);
-        }
-        function closeModal() {
-            document.getElementById('addTaskModal').classList.remove('open');
-            document.getElementById('taskTitle').value = '';
-            document.getElementById('taskDescription').value = '';
-            document.getElementById('taskStatus').value = 'TODO';
-            const btn = document.getElementById('createTaskBtn');
-            btn.disabled = false; btn.textContent = 'Create Task';
-        }
-
-        document.getElementById('openModalBtn').addEventListener('click', openModal);
-        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
-        document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
-        document.getElementById('addTaskModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-        document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); editingTaskId = null; renderTasks(allTasks); } });
-
-        document.getElementById('createTaskBtn').addEventListener('click', async () => {
-            const title = document.getElementById('taskTitle').value.trim();
-            if (!title) { document.getElementById('taskTitle').focus(); return; }
-            const description = document.getElementById('taskDescription').value.trim();
-            const status = document.getElementById('taskStatus').value;
-            const btn = document.getElementById('createTaskBtn');
-            btn.disabled = true; btn.textContent = 'Creating...';
-            try {
-                await createTask(currentUser.uid, { title, description, status });
-                closeModal();
-            } catch (e) {
-                console.error('Create failed:', e);
-                btn.disabled = false; btn.textContent = 'Create Task';
+                await updateTask(currentUser.uid, id, { title, description });
+                editingTaskId = null;
+                // onSnapshot re-renders automatically
+            } catch(e) {
+                console.error('Edit save failed:', e);
+                btn.textContent = 'Save';
+                btn.disabled = false;
             }
         });
+    });
 
-        // ── Filters & Search ──────────────────────────────────────────
-        document.querySelectorAll('.tasks-filters span').forEach(span => {
-            span.addEventListener('click', () => {
-                document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.remove('active'));
-                span.classList.add('active');
-                activeFilter = span.dataset.filter;
+    // ── Cancel edit ───────────────────────────────────────────
+    container.querySelectorAll('[data-cancel-edit]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            editingTaskId = null;
+            renderTasks(allTasks);
+        });
+    });
+
+    // ── Delete: first click = inline confirm ──────────────────
+    container.querySelectorAll('[data-delete]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const id = btn.dataset.delete;
+            if (pendingDeleteId === id) return;
+            pendingDeleteId = id;
+            editingTaskId = null;
+            renderTasks(allTasks);
+        });
+    });
+
+    container.querySelectorAll('[data-confirm-delete]').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = btn.dataset.confirmDelete;
+            btn.textContent = 'Deleting...'; btn.disabled = true;
+            try {
+                await deleteTask(currentUser.uid, id);
+                pendingDeleteId = null;
+            } catch(e) {
+                console.error('Delete failed:', e);
+                pendingDeleteId = null;
                 renderTasks(allTasks);
-            });
-        });
-        ['filterAll', 'filterTodo', 'filterInProgress', 'filterDone'].forEach(id => {
-            const el = document.getElementById(id);
-            if (!el) return;
-            el.addEventListener('click', e => {
-                e.preventDefault();
-                document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-                el.classList.add('active');
-                const m = { filterAll: 'ALL', filterTodo: 'TODO', filterInProgress: 'IN_PROGRESS', filterDone: 'DONE' };
-                activeFilter = m[id];
-                document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.toggle('active', s.dataset.filter === activeFilter));
-                renderTasks(allTasks);
-            });
-        });
-        document.getElementById('searchInput').addEventListener('input', () => renderTasks(allTasks));
-        document.getElementById('logoutBtn').addEventListener('click', logoutUser);
-
-        // ── Quote of the Day Widget ───────────────────────────────────
-        async function loadQuoteOfTheDay() {
-            try {
-                const response = await fetch('https://indian-quotes-api.vercel.app/api/quotes/random');
-                if (!response.ok) throw new Error('Failed to fetch quote');
-                const data = await response.json();
-
-                // The API returns an array of quotes
-                const quoteObj = Array.isArray(data) ? data[0] : data;
-
-                document.querySelector('.quote-loading').style.display = 'none';
-                const contentDiv = document.querySelector('.quote-content');
-                contentDiv.style.display = 'block';
-
-                document.getElementById('quoteText').textContent = `"${quoteObj.quote}"`;
-                document.getElementById('quoteAuthor').textContent = `— ${quoteObj.author?.name || 'Unknown'}`;
-
-            } catch (e) {
-                console.error("Quote API error:", e);
-                document.querySelector('.quote-loading').style.display = 'none';
-                const contentDiv = document.querySelector('.quote-content');
-                contentDiv.style.display = 'block';
-                document.getElementById('quoteText').textContent = `"The only way to do great work is to love what you do."`;
-                document.getElementById('quoteAuthor').textContent = `— Steve Jobs`;
             }
-        }
-        document.addEventListener('DOMContentLoaded', loadQuoteOfTheDay);
-
-        // ── Auth + Live Subscription ──────────────────────────────────
-        setupAuthStateObserver(user => {
-            currentUser = user;
-            const displayName = user.displayName
-                || (user.isAnonymous ? 'Guest'
-                    : (user.email ? user.email.split('@')[0] : 'User'));
-            const hour = new Date().getHours();
-            const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
-            document.getElementById('welcomeMessage').textContent = `${greeting}, ${displayName}`;
-            document.getElementById('avatarDisplay').textContent = displayName.charAt(0).toUpperCase();
-            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US',
-                { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
-
-            // Live clock — ticks every second
-            const clockEl = document.getElementById('liveTime');
-            if (window._clockInterval) clearInterval(window._clockInterval);
-            const tickClock = () => {
-                const now = new Date();
-                clockEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
-            };
-            tickClock();
-            window._clockInterval = setInterval(tickClock, 1000);
-
-
-            if (unsubscribeTasks) unsubscribeTasks();
-            unsubscribeTasks = loadTasks(user.uid, tasks => {
-                tasks.forEach(t => {
-                    if (prevStatusMap[t.id] !== undefined && prevStatusMap[t.id] !== t.status)
-                        recentlyChangedIds.add(t.id);
-                    prevStatusMap[t.id] = t.status;
-                });
-                allTasks = tasks;
-                updateStats(tasks);
-                renderTasks(tasks);
-            });
-        }, () => {
-            if (unsubscribeTasks) unsubscribeTasks();
-            window.location.href = '/login';
         });
-    </script>
-    </script>
-    <script src="/js/cursor.js"></script>
+    });
+
+    container.querySelectorAll('[data-cancel-delete]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            pendingDeleteId = null;
+            renderTasks(allTasks);
+        });
+    });
+}
+
+// ── Advance status with flash animation ───────────────────────
+async function advanceStatus(taskId) {
+    const task = allTasks.find(t => t.id === taskId);
+    if (!task || !currentUser) return;
+    recentlyChangedIds.add(taskId);
+    try {
+        await updateTaskStatus(currentUser.uid, taskId, nextStatus(task.status));
+    } catch(e) {
+        console.error('Status update failed:', e);
+        recentlyChangedIds.delete(taskId);
+    }
+}
+
+// ── Modal ─────────────────────────────────────────────────────
+function openModal() {
+    document.getElementById('addTaskModal').classList.add('open');
+    setTimeout(() => document.getElementById('taskTitle').focus(), 50);
+}
+function closeModal() {
+    document.getElementById('addTaskModal').classList.remove('open');
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDescription').value = '';
+    document.getElementById('taskStatus').value = 'TODO';
+    const btn = document.getElementById('createTaskBtn');
+    btn.disabled = false; btn.textContent = 'Create Task';
+}
+
+document.getElementById('openModalBtn').addEventListener('click', openModal);
+document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+document.getElementById('cancelModalBtn').addEventListener('click', closeModal);
+document.getElementById('addTaskModal').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); editingTaskId = null; renderTasks(allTasks); } });
+
+document.getElementById('createTaskBtn').addEventListener('click', async () => {
+    const title = document.getElementById('taskTitle').value.trim();
+    if (!title) { document.getElementById('taskTitle').focus(); return; }
+    const description = document.getElementById('taskDescription').value.trim();
+    const status = document.getElementById('taskStatus').value;
+    const btn = document.getElementById('createTaskBtn');
+    btn.disabled = true; btn.textContent = 'Creating...';
+    try {
+        await createTask(currentUser.uid, { title, description, status });
+        closeModal();
+    } catch(e) {
+        console.error('Create failed:', e);
+        btn.disabled = false; btn.textContent = 'Create Task';
+    }
+});
+
+// ── Filters & Search ──────────────────────────────────────────
+document.querySelectorAll('.tasks-filters span').forEach(span => {
+    span.addEventListener('click', () => {
+        document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.remove('active'));
+        span.classList.add('active');
+        activeFilter = span.dataset.filter;
+        renderTasks(allTasks);
+    });
+});
+['filterAll','filterTodo','filterInProgress','filterDone'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+        el.classList.add('active');
+        const m = { filterAll:'ALL', filterTodo:'TODO', filterInProgress:'IN_PROGRESS', filterDone:'DONE' };
+        activeFilter = m[id];
+        document.querySelectorAll('.tasks-filters span').forEach(s => s.classList.toggle('active', s.dataset.filter === activeFilter));
+        renderTasks(allTasks);
+    });
+});
+document.getElementById('searchInput').addEventListener('input', () => renderTasks(allTasks));
+document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+
+// ── Quote of the Day Widget ───────────────────────────────────
+async function loadQuoteOfTheDay() {
+    try {
+        const res = await fetch('https://api.allorigins.win/raw?url=https%3A%2F%2Findian-quotes-api.vercel.app%2Fapi%2Fquotes%2Frandom');
+        if (!res.ok) throw new Error('Failed to fetch quote');
+        const data = await res.json();
+        
+        document.querySelector('.quote-loading').style.display = 'none';
+        const contentDiv = document.querySelector('.quote-content');
+        contentDiv.style.display = 'block';
+        
+        document.getElementById('quoteText').textContent = `"${data.quote}"`;
+        document.getElementById('quoteAuthor').textContent = `— ${data.author?.name || 'Unknown'}`;
+        
+    } catch (e) {
+        console.error("Quote API error:", e);
+        document.querySelector('.quote-loading').style.display = 'none';
+        const contentDiv = document.querySelector('.quote-content');
+        contentDiv.style.display = 'block';
+        document.getElementById('quoteText').textContent = `"The only way to do great work is to love what you do."`;
+        document.getElementById('quoteAuthor').textContent = `— Steve Jobs`;
+    }
+}
+document.addEventListener('DOMContentLoaded', loadQuoteOfTheDay);
+
+// ── Auth + Live Subscription ──────────────────────────────────
+setupAuthStateObserver(user => {
+    currentUser = user;
+    const displayName = user.displayName
+        || (user.isAnonymous ? 'Guest'
+            : (user.email ? user.email.split('@')[0] : 'User'));
+    const hour = new Date().getHours();
+    const greeting = hour < 12 ? 'Good morning' : hour < 18 ? 'Good afternoon' : 'Good evening';
+    document.getElementById('welcomeMessage').textContent = `${greeting}, ${displayName}`;
+    document.getElementById('avatarDisplay').textContent = displayName.charAt(0).toUpperCase();
+    document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US',
+        { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
+
+    // Live clock — ticks every second
+    const clockEl = document.getElementById('liveTime');
+    if (window._clockInterval) clearInterval(window._clockInterval);
+    const tickClock = () => {
+        const now = new Date();
+        clockEl.textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+    };
+    tickClock();
+    window._clockInterval = setInterval(tickClock, 1000);
+
+
+    if (unsubscribeTasks) unsubscribeTasks();
+    unsubscribeTasks = loadTasks(user.uid, tasks => {
+        tasks.forEach(t => {
+            if (prevStatusMap[t.id] !== undefined && prevStatusMap[t.id] !== t.status)
+                recentlyChangedIds.add(t.id);
+            prevStatusMap[t.id] = t.status;
+        });
+        allTasks = tasks;
+        updateStats(tasks);
+        renderTasks(tasks);
+    });
+}, () => {
+    if (unsubscribeTasks) unsubscribeTasks();
+    window.location.href = '/login';
+});
+</script>
+</script>
+<script src="/js/cursor.js"></script>
 </body>
-
 </html>
