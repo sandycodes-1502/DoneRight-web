@@ -14,7 +14,11 @@
 <div class="dashboard-layout">
 
     <!-- ── Sidebar ─────────────────────────────────────────────── -->
-    <aside class="dashboard-sidebar">
+    <div id="sidebarOverlay" class="sidebar-overlay"></div>
+    <aside class="dashboard-sidebar" id="sidebar">
+        <button id="closeSidebarBtn" class="sidebar-close-btn action-icon" aria-label="Close sidebar">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
         <a href="/" class="sidebar-logo">
             <img src="/images/logo.svg" alt="DoneRight" width="32" height="32" style="border-radius:8px">
             <span>DoneRight</span>
@@ -61,10 +65,15 @@
 
         <!-- Header -->
         <header class="dashboard-header">
-            <div class="dashboard-greeting">
+            <div style="display:flex;align-items:flex-end;gap:1rem;">
+                <button id="openSidebarBtn" class="mobile-menu-btn action-icon" aria-label="Open sidebar" style="display:none;background:transparent;border:none;">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+                </button>
+                <div class="dashboard-greeting">
                 <h1 id="welcomeMessage">Loading...</h1>
                 <p id="currentDate"></p>
                 <span id="liveTime" style="font-size:0.8rem;opacity:0.45;letter-spacing:0.04em;font-variant-numeric:tabular-nums;"></span>
+            </div>
             </div>
             <div class="dashboard-actions">
                 <input type="text" id="searchInput" class="search-input" placeholder="Search tasks...">
@@ -612,8 +621,22 @@ document.querySelectorAll('.tasks-filters span').forEach(span => {
         renderTasks(allTasks);
     });
 });
-document.getElementById('searchInput').addEventListener('input', () => renderTasks(allTasks));
 document.getElementById('logoutBtn').addEventListener('click', logoutUser);
+
+// Mobile Sidebar toggle logic
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const openSidebarBtn = document.getElementById('openSidebarBtn');
+const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+function toggleSidebar() {
+    sidebar.classList.toggle('open');
+    sidebarOverlay.classList.toggle('open');
+}
+
+openSidebarBtn.addEventListener('click', toggleSidebar);
+closeSidebarBtn.addEventListener('click', toggleSidebar);
+sidebarOverlay.addEventListener('click', toggleSidebar);
 
 // ── Quote of the Day Widget ───────────────────────────────────
 async function loadQuoteOfTheDay() {
