@@ -64,7 +64,8 @@
     <main class="dashboard-main">
 
         <!-- Header -->
-        <header class="dashboard-header">
+        <div class="dashboard-top-section">
+            <header class="dashboard-header">
             <div style="display:flex;align-items:flex-end;gap:1rem;">
                 <button id="openSidebarBtn" class="mobile-menu-btn action-icon" aria-label="Open sidebar" style="display:none;background:transparent;border:none;">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
@@ -119,9 +120,11 @@
                 <span class="stat-subtext" id="statDonePercent">completed</span>
             </div>
         </div>
+        </div> <!-- End of dashboard-top-section -->
 
         <!-- Task List (live from Firestore) -->
-        <div class="tasks-area">
+        <div class="tasks-area-wrapper">
+            <div class="tasks-area">
             <div class="tasks-toolbar">
                 <div class="tasks-title"><h2>Your Tasks</h2></div>
                 <div class="tasks-filters">
@@ -132,7 +135,7 @@
                 </div>
             </div>
             
-            <div class="tasks-content-wrapper" style="display: flex; gap: 2rem; align-items: flex-start;">
+            <div class="tasks-content-wrapper" style="display: flex; gap: 2rem; align-items: stretch;">
                 <div id="tasksList" style="flex: 1; min-width: 0;">
                     <div class="tasks-loading">
                         <div class="spinner"></div>
@@ -156,6 +159,11 @@
                 </div>
             </div>
         </div>
+        </div> <!-- End of tasks-area-wrapper -->
+
+        <button id="jumpToTopBtn" class="jump-to-top-btn" aria-label="Jump to top" title="Jump to top">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="18 15 12 9 6 15"></polyline></svg>
+        </button>
 
     </main>
 </div>
@@ -637,6 +645,24 @@ function toggleSidebar() {
 openSidebarBtn.addEventListener('click', toggleSidebar);
 closeSidebarBtn.addEventListener('click', toggleSidebar);
 sidebarOverlay.addEventListener('click', toggleSidebar);
+
+// ── Jump to Top ───────────────────────────────────────────────
+const tasksScrollArea = document.getElementById('tasksList');
+const jumpToTopBtn = document.getElementById('jumpToTopBtn');
+
+if (tasksScrollArea && jumpToTopBtn) {
+    tasksScrollArea.addEventListener('scroll', () => {
+        if (tasksScrollArea.scrollTop > 300) {
+            jumpToTopBtn.classList.add('visible');
+        } else {
+            jumpToTopBtn.classList.remove('visible');
+        }
+    });
+
+    jumpToTopBtn.addEventListener('click', () => {
+        tasksScrollArea.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+}
 
 // ── Quote of the Day Widget ───────────────────────────────────
 async function loadQuoteOfTheDay() {
