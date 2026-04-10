@@ -64,6 +64,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (googleBtn) {
         googleBtn.addEventListener('click', async () => {
+            window.isSigningIn = true;
+            let errEl = document.getElementById('authErrorMsg');
+            if (errEl) errEl.textContent = '';
             try {
                 // If user is already a guest, link the account
                 if (auth.currentUser && auth.currentUser.isAnonymous) {
@@ -74,7 +77,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         window.location.replace('/dashboard');
                         return;
                     } catch (linkError) {
-                        if (SILENT_ERRORS.has(linkError.code)) return; // user closed popup
+                        if (SILENT_ERRORS.has(linkError.code)) {
+                            window.isSigningIn = false;
+                            return; // user closed popup
+                        }
                         if (linkError.code === 'auth/credential-already-in-use') {
                             console.log("Existing Google user — signing in directly.");
                             await signOut(auth);
@@ -93,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 await ensureUserDocument(result.user);
                 window.location.replace('/dashboard');
             } catch (error) {
+                window.isSigningIn = false;
                 if (SILENT_ERRORS.has(error.code)) return; // user closed popup
                 console.error("Error signing in with Google:", error);
                 showAuthError("Couldn't sign in with Google. Please try again.");
@@ -102,11 +109,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (guestBtn) {
         guestBtn.addEventListener('click', async () => {
+            window.isSigningIn = true;
+            let errEl = document.getElementById('authErrorMsg');
+            if (errEl) errEl.textContent = '';
             try {
                 const result = await signInAnonymously(auth);
                 await ensureUserDocument(result.user);
                 window.location.replace('/dashboard');
             } catch (error) {
+                window.isSigningIn = false;
                 console.error("Error signing in as guest:", error);
                 showAuthError("Couldn't sign in as guest. Please try again.");
             }

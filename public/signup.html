@@ -51,8 +51,10 @@
     <script type="module">
         import { setupAuthStateObserver } from '/js/auth.js';
         setupAuthStateObserver((user) => {
-            // Redirect already logged in users
-            window.location.replace('/dashboard');
+            // Redirect already logged in users if no active sign-in flow is running
+            if (!window.isSigningIn) {
+                window.location.replace('/dashboard');
+            }
         });
     </script>
     <script src="/js/cursor.js"></script>
