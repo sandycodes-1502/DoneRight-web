@@ -1,0 +1,13 @@
+/* Pricing Styling */
+.pricing-section {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 6rem 2rem;
+    text-align: center;
+}
+
+.pricing-section .section-subtitle {
+    margin-bottom: 0;
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
