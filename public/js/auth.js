@@ -30,10 +30,14 @@ export async function logoutUser() {
 
 // Android stores no fields on the user document itself, just its subcollections.
 async function ensureUserDocument(user) {
-    const userRef = doc(db, 'users', user.uid);
-    const docSnap = await getDoc(userRef);
-    if (!docSnap.exists()) {
-        await setDoc(userRef, {}, { merge: true }); // Empty placeholder
+    try {
+        const userRef = doc(db, 'users', user.uid);
+        const docSnap = await getDoc(userRef);
+        if (!docSnap.exists()) {
+            await setDoc(userRef, {}, { merge: true }); // Empty placeholder
+        }
+    } catch (e) {
+        console.warn("Skipping document initialization:", e);
     }
 }
 
